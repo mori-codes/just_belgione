@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-const SOCKER_URL = 'ws://localhost:8000/upgrade';
+const SOCKER_URL = 'ws://just-belgiapi.deno.dev/upgrade';
 const SOCKET_CONNECTION_STATUS_MAPPING = {
   [ReadyState.CONNECTING]: 'Connecting',
   [ReadyState.OPEN]: 'Open',
