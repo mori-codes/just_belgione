@@ -5,8 +5,8 @@ import { isCreateRoomBody } from '@just-belgione/types';
 const BASE_URL = '/rooms';
 
 const setupRoomsRoutes = (router: Router) => {
-  console.log("ESTOY VIVO")
   router.post(BASE_URL, async (ctx) => {
+    console.log("ESTOY VIVO")
     if (!ctx.request.hasBody) {
       ctx.throw(415);
       return;

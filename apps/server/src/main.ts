@@ -23,7 +23,7 @@ setupWs(router);
 // START SERVER
 app.use(
   oakCors({
-    origin: ['http://localhost:4200', 'https://just-belgione.vercel.app/'],
+    origin: ['http://localhost:4200', 'https://just-belgione.vercel.app'],
   })
 );
 app.use(router.routes());
