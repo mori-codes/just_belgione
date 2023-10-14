@@ -1,6 +1,7 @@
 import { Application, Router } from 'oak';
 import { oakCors } from 'cors';
 import { setupRoomsRoutes } from './handlers/rest/roomsHandler.ts';
+import { setupWs } from "./handlers/ws/wsHandler.ts";
 
 let port = 80;
 if (Deno.env.get('PRODUCTION') !== 'true') {
@@ -14,11 +15,14 @@ const router = new Router();
 
 // ROOM HANDLERS
 setupRoomsRoutes(router);
+setupWs(router);
 
 // START SERVER
-app.use(oakCors({
-  origin: 'http://localhost:4200',
-}))
+app.use(
+  oakCors({
+    origin: ['http://localhost:4200', 'https://just-belgione.vercel.app/'],
+  })
+);
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen({ port });
