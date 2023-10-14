@@ -16,13 +16,12 @@ const setupRoomsRoutes = (router: Router) => {
       ctx.throw(400);
       return;
     }
-    
     console.log("ANTES DE CREAR")
     const id = await createRoom(room);
     console.log("DESPUES DE CREAR")
     ctx.response.body = { id };
   });
-  
+
   router.get(`${BASE_URL}/:id`, async (ctx) => {
     const room = await getRoom(ctx.params['id']);
 

@@ -3,14 +3,18 @@ import { useCreateRoom } from '../../resources/room/room.hooks';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [user, setUser] = useUser();
   const { mutateAsync, isLoading } = useCreateRoom();
 
   const handleCreateRoom = async () => {
-    const { id } = await mutateAsync({ players: [user] });
+    const { id } = await mutateAsync({ players: [] });
     navigate(`/room/${id}`);
+  };
+
+  const handleJoinRoom = () => {
+    navigate(`/join`);
   };
 
   return (
@@ -19,7 +23,7 @@ const Home = () => {
       <br />
       <button onClick={handleCreateRoom}>Crear sala</button>
       <br />
-      <button>Unirse a sala</button>
+      <button onClick={handleJoinRoom}>Unirse a sala</button>
       {isLoading && <div>Creando sala...</div>}
     </div>
   );

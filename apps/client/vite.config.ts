@@ -17,9 +17,16 @@ export default defineConfig(({ mode }) => {
     },
 
     define: {
-      "process.env": {
-        NX_REACT_APP_API_URL: mode === "development" ? "http://localhost:8000" : "https://just-belgiapi.deno.dev",
-      }
+      'process.env': {
+        NX_REACT_APP_API_URL:
+          mode === 'development'
+            ? 'http://localhost:8000'
+            : 'https://just-belgiapi.deno.dev',
+        NX_REACT_APP_WS_URL:
+          mode === 'development'
+            ? 'ws://localhost:8000'
+            : 'wss://just-belgiapi.deno.dev',
+      },
     },
 
     plugins: [react(), nxViteTsPaths()],
