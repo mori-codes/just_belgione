@@ -1,0 +1,24 @@
+{
+  "name": "types",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "types",
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/deno:test",
+      "outputs": ["coverage/types"],
+      "options": {
+        "coverageDirectory": "coverage/types",
+        "denoConfig": "types/deno.json",
+        "check": "local"
+      }
+    },
+    "lint": {
+      "executor": "@nx/deno:lint",
+      "options": {
+        "denoConfig": "types/deno.json"
+      }
+    }
+  },
+  "tags": []
+}
