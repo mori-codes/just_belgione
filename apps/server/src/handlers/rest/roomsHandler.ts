@@ -5,6 +5,7 @@ import { isCreateRoomBody } from '@just-belgione/types';
 const BASE_URL = '/rooms';
 
 const setupRoomsRoutes = (router: Router) => {
+  console.log("ESTOY VIVO")
   router.post(BASE_URL, async (ctx) => {
     if (!ctx.request.hasBody) {
       ctx.throw(415);
@@ -16,7 +17,9 @@ const setupRoomsRoutes = (router: Router) => {
       return;
     }
     
+    console.log("ANTES DE CREAR")
     const id = await createRoom(room);
+    console.log("DESPUES DE CREAR")
     ctx.response.body = { id };
   });
   
