@@ -9,8 +9,6 @@ const getRoom = async (id: string) => {
   const BASE_URL = Deno.env.get('MONGO_BASE_URL');
   const API_KEY = Deno.env.get('MONGO_API_KEY');
 
-  console.log(id);
-
   if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
 
   const res = await fetch(`${BASE_URL}/action/findOne`, {

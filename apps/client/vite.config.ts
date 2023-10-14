@@ -2,30 +2,31 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
-export default defineConfig({
-  cacheDir: '../../node_modules/.vite/client',
+export default defineConfig(({ mode }) => {
+  return {
+    cacheDir: '../../node_modules/.vite/client',
 
-  server: {
-    port: 4200,
-    host: 'localhost',
-  },
+    server: {
+      port: 4200,
+      host: 'localhost',
+    },
 
-  preview: {
-    port: 4300,
-    host: 'localhost',
-  },
+    preview: {
+      port: 4300,
+      host: 'localhost',
+    },
 
-  plugins: [react(), nxViteTsPaths()],
+    define: {
+      "process.env": {
+        NX_REACT_APP_API_URL: mode === "development" ? "http://localhost:8000" : "https://just-belgiapi.deno.dev",
+      }
+    },
 
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+    plugins: [react(), nxViteTsPaths()],
 
-  test: {
-    globals: true,
-    cache: { dir: '../../node_modules/.vitest' },
-    environment: 'jsdom',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  },
+    // Uncomment this if you are using workers.
+    // worker: {
+    //  plugins: [ nxViteTsPaths() ],
+    // },
+  };
 });

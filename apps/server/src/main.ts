@@ -1,7 +1,10 @@
 import { Application, Router } from 'oak';
+import { oakCors } from 'cors';
 import { setupRoomsRoutes } from './handlers/rest/roomsHandler.ts';
 
+let port = 80;
 if (Deno.env.get('PRODUCTION') !== 'true') {
+  port = 8000;
   console.log('Using local environment settings: ', Deno.env.get('PRODUCTION'));
   import('./environment.ts');
 }
@@ -13,9 +16,12 @@ const router = new Router();
 setupRoomsRoutes(router);
 
 // START SERVER
+app.use(oakCors({
+  origin: 'http://localhost:4200',
+}))
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen({ port: 80 });
+app.listen({ port });
 
 // Deno.serve((req) => {
 //   if (req.headers.get('upgrade') !== 'websocket') {
