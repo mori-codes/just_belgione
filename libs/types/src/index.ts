@@ -6,6 +6,9 @@ type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 type Room = {
   _id: string;
+  /**
+   * The list of players. The first player in the list is
+   * the one who created the room. */
   players: Player[];
   status: RoomStatus;
 };
