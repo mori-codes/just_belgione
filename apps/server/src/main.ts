@@ -1,13 +1,16 @@
 import { Application, Router } from 'oak';
 import { oakCors } from 'cors';
 import { setupRoomsRoutes } from './handlers/rest/roomsHandler.ts';
-import { setupWs } from "./handlers/ws/wsHandler.ts";
+import { setupWs } from './handlers/ws/wsHandler.ts';
+import { load } from 'dotenv';
 
 let port = 80;
 if (Deno.env.get('PRODUCTION') !== 'true') {
+  const env = await load();
   port = 8000;
   console.log('Using local environment settings: ', Deno.env.get('PRODUCTION'));
-  import('./environment.ts');
+  Deno.env.set('MONGO_API_KEY', env['MONGO_API_KEY']);
+  Deno.env.set('MONGO_BASE_URL', env['MONGO_BASE_URL']);
 }
 
 const app = new Application();
