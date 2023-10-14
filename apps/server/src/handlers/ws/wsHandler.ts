@@ -32,9 +32,6 @@ const setupWs = (router: Router) => {
             socket,
           });
           break;
-        default:
-          console.log('default!');
-          break;
       }
     };
     socket.onclose = () => {

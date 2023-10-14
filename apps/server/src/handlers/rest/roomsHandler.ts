@@ -6,7 +6,6 @@ const BASE_URL = '/rooms';
 
 const setupRoomsRoutes = (router: Router) => {
   router.post(BASE_URL, async (ctx) => {
-    console.log("ESTOY VIVO")
     if (!ctx.request.hasBody) {
       ctx.throw(415);
       return;
@@ -16,9 +15,7 @@ const setupRoomsRoutes = (router: Router) => {
       ctx.throw(400);
       return;
     }
-    console.log("ANTES DE CREAR")
     const id = await createRoom(room);
-    console.log("DESPUES DE CREAR")
     ctx.response.body = { id };
   });
 

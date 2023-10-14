@@ -29,18 +29,3 @@ app.use(
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen({ port });
-
-// Deno.serve((req) => {
-//   if (req.headers.get('upgrade') !== 'websocket') {
-//     return new Response(null, { status: 501 });
-//   }
-//   const { socket, response } = Deno.upgradeWebSocket(req);
-//   socket.addEventListener('open', () => {
-//     console.log('a client connected!');
-//   });
-//   socket.addEventListener('message', async (event) => {
-//     socket.send(`${event.data} - Received!`); // Send message with its own message.
-//   });
-
-//   return response;
-// });
