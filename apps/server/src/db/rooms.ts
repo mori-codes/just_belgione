@@ -4,6 +4,9 @@ import {
   MongoInsertResponse,
   Room,
   Player,
+  RoomStatus,
+  Round,
+  Word,
 } from '@just-belgione/types';
 
 const getRoom = async (id: string) => {
@@ -44,6 +47,7 @@ const createRoom = async (room: CreateRoomBody | Room): Promise<string> => {
   const document: Omit<Room, '_id'> = {
     ...room,
     status: 'WAITING',
+    rounds: [],
   };
 
   const res = await fetch(`${BASE_URL}/action/insertOne`, {
@@ -95,4 +99,72 @@ const addPlayer = async (id: Room['_id'], player: Player) => {
   });
 };
 
-export { getRoom, createRoom, addPlayer };
+const updateGameStatus = async (id: Room['_id'], status: RoomStatus) => {
+  const BASE_URL = Deno.env.get('MONGO_BASE_URL');
+  const API_KEY = Deno.env.get('MONGO_API_KEY');
+  if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
+
+  await fetch(`${BASE_URL}/action/updateOne`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': API_KEY,
+    },
+    body: JSON.stringify({
+      database: 'justone',
+      dataSource: 'Cluster',
+      collection: 'rooms',
+      filter: {
+        _id: {
+          $oid: id,
+        },
+      },
+      update: {
+        status,
+      },
+    }),
+  });
+};
+
+const createRound = async (
+  id: Room['_id'],
+  playerGuessing: Player,
+  wordToGuess: Word
+) => {
+  const BASE_URL = Deno.env.get('MONGO_BASE_URL');
+  const API_KEY = Deno.env.get('MONGO_API_KEY');
+  if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
+
+  const newRound: Round = {
+    playerGuessing,
+    wordToGuess,
+    hints: [],
+  };
+
+  await fetch(`${BASE_URL}/action/updateOne`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': API_KEY,
+    },
+    body: JSON.stringify({
+      database: 'justone',
+      dataSource: 'Cluster',
+      collection: 'rooms',
+      filter: {
+        _id: {
+          $oid: id,
+        },
+      },
+      update: {
+        $push: {
+          rounds: newRound,
+        },
+      },
+    }),
+  });
+};
+
+export { getRoom, createRoom, addPlayer, updateGameStatus, createRound };

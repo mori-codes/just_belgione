@@ -2,7 +2,23 @@
 
 type Player = string;
 
+type Word = string;
+
+type Hint = {
+  player: Player;
+  hint: Word;
+  isValid?: boolean;
+};
+
 type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
+
+type Round = {
+  playerGuessing: Player;
+  wordToGuess: Word;
+  hints: Hint[];
+  guess?: Word;
+  correct?: boolean;
+};
 
 type Room = {
   _id: string;
@@ -11,6 +27,7 @@ type Room = {
    * the one who created the room. */
   players: Player[];
   status: RoomStatus;
+  rounds: Round[];
 };
 
 type CreateRoomBody = Pick<Room, 'players'>;
@@ -43,18 +60,25 @@ type PlayerJoinedMessage = {
   };
 };
 
-type LeaveGameMessage = {
-  type: 'leaveGame';
+type StartGameMessage = {
+  type: 'start';
   data: {
     roomId: string;
-    playerId: string;
+  };
+};
+
+type NewRoundMessage = {
+  type: 'newRound';
+  data: {
+    round: Round;
   };
 };
 
 type SocketMessage = (
   | JoinGameMessage
   | PlayerJoinedMessage
-  | LeaveGameMessage
+  | StartGameMessage
+  | NewRoundMessage
 ) & {
   status: RoomStatus;
 };
@@ -76,5 +100,8 @@ export type {
   SocketMessage,
   JoinGameMessage,
   ActiveGames,
+  StartGameMessage,
+  Round,
+  Word,
 };
 export { isCreateRoomBody };

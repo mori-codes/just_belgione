@@ -2,7 +2,10 @@
   "name": "@just-belgione/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "client:start": "yarn nx run client:serve",
+    "server:start": "yarn nx run server:serve"
+  },
   "private": true,
   "dependencies": {
     "@swc/helpers": "~0.5.2",

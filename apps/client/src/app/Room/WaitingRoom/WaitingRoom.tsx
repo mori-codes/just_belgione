@@ -4,6 +4,7 @@ import {
   Room,
   SocketMessage,
   Player,
+  StartGameMessage,
 } from '@just-belgione/types';
 import { useEffect, useRef, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
@@ -12,7 +13,7 @@ interface Props {
   roomId: Room['_id'];
   status: RoomStatus;
   lastJsonMessage: SocketMessage;
-  sendMessage: (jsonMessage: JoinGameMessage) => void;
+  sendMessage: (jsonMessage: JoinGameMessage | StartGameMessage) => void;
 }
 
 const WaitingRoom: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const WaitingRoom: React.FC<Props> = ({
   const [players, setPlayers] = useState<Player[]>([]);
   const [user] = useUser();
   const wasJoinReqSent = useRef(false);
+  const userCreatedTheRoom = players?.length && user === players[0];
 
   // Update the list of players
   useEffect(() => {
@@ -46,6 +48,15 @@ const WaitingRoom: React.FC<Props> = ({
     wasJoinReqSent.current = true;
   }, [roomId, user, status, sendMessage]);
 
+  const handleStartGame = () => {
+    sendMessage({
+      type: 'start',
+      data: {
+        roomId,
+      },
+    });
+  };
+
   const getPlayers = () =>
     players.map((player) => <li key={player}>{player}</li>);
 
@@ -55,6 +66,11 @@ const WaitingRoom: React.FC<Props> = ({
       <div>
         <h2>Jugadores:</h2>
         <ul>{getPlayers()}</ul>
+      </div>
+      <div>
+        {userCreatedTheRoom && (
+          <button onClick={handleStartGame}>Empezar</button>
+        )}
       </div>
     </>
   );

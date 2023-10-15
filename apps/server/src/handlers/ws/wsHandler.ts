@@ -1,6 +1,7 @@
 import { Router } from 'oak';
 import { ActiveGames, SocketMessage } from '@just-belgione/types';
 import { joinUser } from './helpers/joinUser.ts';
+import { startGame } from './helpers/startGame.ts';
 
 const BASE_URL = '/ws';
 
@@ -21,7 +22,7 @@ const setupWs = (router: Router) => {
     const socket = ctx.upgrade();
 
     socket.onopen = () => {};
-    socket.onmessage = (event: MessageEvent) => {
+    socket.onmessage = (event) => {
       const message = JSON.parse(event.data) as SocketMessage;
       switch (message.type) {
         case 'join':
@@ -31,6 +32,9 @@ const setupWs = (router: Router) => {
             roomId: message.data.roomId,
             socket,
           });
+          break;
+        case 'start':
+          startGame(activeGames, message.data.roomId);
           break;
       }
     };
