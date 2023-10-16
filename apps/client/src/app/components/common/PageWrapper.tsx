@@ -8,9 +8,9 @@ const BACKGROUND_IMAGES = {
 
 const PageWrapper = ({ children }: Props) => {
   return (
-    <div className="min-h-[100vh] min-w-[100vw] bg-light-gradient flex flex-col text-jo-black">
+    <div className="min-h-[100vh] bg-light-gradient flex flex-col items-center text-jo-black">
       <div className={`background ${BACKGROUND_IMAGES['light']}`} />
-      {children}
+      <div className="max-w-[600px]">{children}</div>
     </div>
   );
 };

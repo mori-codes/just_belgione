@@ -2,7 +2,6 @@ import { useUser } from '../../atoms/userAtom';
 import { useCreateRoom } from '../../resources/room/room.hooks';
 import { useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../common/PageWrapper';
-import logoImage from '../../../assets/logoImage.png';
 import { Input } from '../common/Input';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -29,7 +28,7 @@ const Home = () => {
   return (
     <PageWrapper>
       <div className="p-8 grow flex flex-col">
-        <img src={logoImage} alt="Solo una" />
+        <img src="/logoimage.png" alt="Solo una" />
         <div className='flex flex-col gap-12 pt-8'>
           <Input
             label="Introduce tu nombre"
