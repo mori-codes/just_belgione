@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes movingBackground {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 100000px 100000px;
+  }
+}
+
+.background-light {
+  background-image: url('/background-light.png');
+}
+
+.background {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  animation: movingBackground 20000s linear infinite;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
