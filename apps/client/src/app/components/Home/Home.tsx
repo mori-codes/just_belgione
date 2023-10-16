@@ -43,7 +43,7 @@ const Home = () => {
                 animate={appearingButtonVariantsLabels.visible}
                 exit={appearingButtonVariantsLabels.hidden}
                 key="homeButtons"
-                className='flex flex-col gap-12'
+                className='flex flex-col gap-12 pb-8'
               >
                 <Button onClick={handleCreateRoom}>Crear sala</Button>
                 <Button onClick={handleJoinRoom}>Unirse a sala</Button>

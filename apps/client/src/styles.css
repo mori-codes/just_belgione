@@ -19,7 +19,7 @@
 
 .background {
   position: absolute;
-  height: 100dvh;
+  height: 100%;
   width: 100dvw;
   animation: movingBackground 20000s linear infinite;
   top: 0;
