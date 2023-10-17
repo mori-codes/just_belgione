@@ -17,6 +17,10 @@
   background-image: url('/background-light.png');
 }
 
+.background-dark {
+  background-image: url('/background-dark.png');
+}
+
 .background {
   position: absolute;
   height: 100%;

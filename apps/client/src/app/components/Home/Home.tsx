@@ -9,6 +9,7 @@ import {
   appearingButtonVariantsLabels,
 } from './Home.animations';
 import { Button } from '../common/Button';
+import { ButtonLink } from '../common/ButtonLink';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -21,15 +22,11 @@ const Home = () => {
     navigate(`/room/${id}`);
   };
 
-  const handleJoinRoom = () => {
-    navigate(`/join`);
-  };
-
   return (
     <PageWrapper>
       <div className="p-8 grow flex flex-col">
         <img src="/logoimage.png" alt="Solo una" />
-        <div className='flex flex-col gap-12 pt-8'>
+        <div className="flex flex-col gap-12 pt-8">
           <Input
             label="Introduce tu nombre"
             value={user}
@@ -43,10 +40,10 @@ const Home = () => {
                 animate={appearingButtonVariantsLabels.visible}
                 exit={appearingButtonVariantsLabels.hidden}
                 key="homeButtons"
-                className='flex flex-col gap-12 pb-8'
+                className="flex flex-col gap-12 pb-8"
               >
                 <Button onClick={handleCreateRoom}>Crear sala</Button>
-                <Button onClick={handleJoinRoom}>Unirse a sala</Button>
+                <ButtonLink to="/join">Unirse a sala</ButtonLink>
               </motion.div>
             ) : null}
           </AnimatePresence>

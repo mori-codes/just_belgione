@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         "light-gradient": "linear-gradient(0deg, #FAE493 0%, #FFFFFF00 5%, #FFFFFF00 95%, #FAE493 100%)",
+        "dark-gradient": "linear-gradient(0deg, #955AB1 0%, #FFFFFF00 5%, #FFFFFF00 95%, #955AB1 100%)",
       },
       colors: {
         "jo-main": "#FFD53F",
