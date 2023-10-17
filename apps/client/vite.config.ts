@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
           name: "Solo Una",
           short_name: "Solo Una",
           description: "By p&m",
-          start_url: "/index.html",
+          start_url: "/",
           display: "standalone",
           theme_color: "#FAE493",
           background_color: "#FAE493",
