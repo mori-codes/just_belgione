@@ -44,6 +44,8 @@ export default defineConfig(({ mode }) => {
           description: "By p&m",
           start_url: "/index.html",
           display: "standalone",
+          theme_color: "#FAE493",
+          background_color: "#FAE493",
           lang: "es",
           display_override: ["standalone", "window-controls-overlay"],
           orientation: "portrait",
