@@ -8,6 +8,10 @@ import {
 } from '@just-belgione/types';
 import { useEffect, useRef, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
+import { PageWrapper } from '../../components/common/PageWrapper';
+import { PlayerDisplay } from './PlayerDisplay';
+import { Button } from '../../components/common/Button';
+import { RoomCode } from './RoomCode';
 
 interface Props {
   roomId: Room['_id'];
@@ -57,22 +61,18 @@ const WaitingRoom: React.FC<Props> = ({
     });
   };
 
-  const getPlayers = () =>
-    players.map((player) => <li key={player}>{player}</li>);
-
   return (
-    <>
-      Esperando a la sala {roomId}
-      <div>
-        <h2>Jugadores:</h2>
-        <ul>{getPlayers()}</ul>
+    <PageWrapper center>
+      <div className="flex flex-col grow p-8 py-16 gap-8 overflow-hidden">
+        <RoomCode roomId={roomId} />
+        <PlayerDisplay players={players} />
+        <div>
+          {userCreatedTheRoom && (
+            <Button onClick={handleStartGame}>Empezar</Button>
+          )}
+        </div>
       </div>
-      <div>
-        {userCreatedTheRoom && (
-          <button onClick={handleStartGame}>Empezar</button>
-        )}
-      </div>
-    </>
+    </PageWrapper>
   );
 };
 

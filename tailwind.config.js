@@ -19,7 +19,8 @@ module.exports = {
         "jo-blue": "#0CB6FF",
         "jo-green": "#6CF869",
         "jo-black": "#121212",
-        "jo-purple": "CF5CCB"
+        "jo-purple": "#CF5CCB",
+        "jo-light-black": "rgba(18, 18, 18, 0.75)"
       },
       fontSize: {
         "jo-sm": "20px", 
