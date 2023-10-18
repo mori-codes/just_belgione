@@ -43,7 +43,7 @@ const Home = () => {
                 className="flex flex-col gap-12 pb-8"
               >
                 <Button onClick={handleCreateRoom}>Crear sala</Button>
-                <ButtonLink to="/join">Unirse a sala</ButtonLink>
+                <ButtonLink to="/join">Entrar a sala</ButtonLink>
               </motion.div>
             ) : null}
           </AnimatePresence>

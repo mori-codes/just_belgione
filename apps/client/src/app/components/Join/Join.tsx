@@ -1,10 +1,11 @@
 import { Room } from '@just-belgione/types';
 import { ChangeEventHandler, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { PageWrapper } from '../common/PageWrapper';
+import { Input } from '../common/Input';
+import { ButtonLink } from '../common/ButtonLink';
 
 const Join = () => {
   const [roomId, setRoomId] = useState<Room['_id']>();
-  const navigate = useNavigate();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({
     target: { value },
@@ -12,15 +13,17 @@ const Join = () => {
     setRoomId(value);
   };
 
-  const handleJoin = () => {
-    navigate(`/room/${roomId}`);
-  };
-
   return (
-    <div>
-      <input type="text" value={roomId} onChange={handleChange} />
-      <button onClick={handleJoin}>Join</button>
-    </div>
+    <PageWrapper center>
+      <div className='flex flex-col gap-4 p-8'>
+      <Input
+        label="Introduce el código de sala:"
+        value={roomId}
+        onChange={handleChange}
+      />
+      <ButtonLink to={`/room/${roomId}`}>Join</ButtonLink>
+      </div>
+    </PageWrapper>
   );
 };
 
