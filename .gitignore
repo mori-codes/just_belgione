@@ -40,3 +40,6 @@ Thumbs.db
 
 # Deno environment.ts
 .env
+
+# Local PWA files 
+apps/client/dev-dist
