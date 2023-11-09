@@ -74,11 +74,20 @@ type NewRoundMessage = {
   };
 };
 
+type DuplicatedPlayerError = {
+  type: 'duplicatePlayerError';
+  data: {
+    message: string;
+  };
+};
+
+// TODO: Maybe split types into two, server -> client and client -> server
 type SocketMessage = (
   | JoinGameMessage
   | PlayerJoinedMessage
   | StartGameMessage
   | NewRoundMessage
+  | DuplicatedPlayerError
 ) & {
   status: RoomStatus;
 };

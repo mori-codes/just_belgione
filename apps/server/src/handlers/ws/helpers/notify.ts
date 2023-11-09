@@ -1,5 +1,9 @@
 import { ActiveGames, SocketMessage } from '@just-belgione/types';
 
+const notifyPlayer = (socket: WebSocket, message: SocketMessage) => {
+  socket.send(JSON.stringify(message));
+};
+
 const notifyAll = (
   activeGames: ActiveGames,
   roomId: string,
@@ -12,4 +16,4 @@ const notifyAll = (
   });
 };
 
-export { notifyAll };
+export { notifyPlayer, notifyAll };

@@ -12,6 +12,7 @@ import { PageWrapper } from '../../components/common/PageWrapper';
 import { PlayerDisplay } from './PlayerDisplay';
 import { Button } from '../../components/common/Button';
 import { RoomCode } from './RoomCode';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   roomId: Room['_id'];
@@ -30,12 +31,21 @@ const WaitingRoom: React.FC<Props> = ({
   const [user] = useUser();
   const wasJoinReqSent = useRef(false);
   const userCreatedTheRoom = players?.length && user === players[0];
+  const navigate = useNavigate();
 
   // Update the list of players
   useEffect(() => {
     if (!lastJsonMessage || lastJsonMessage.type !== 'playerJoined') return;
     setPlayers(lastJsonMessage.data.players);
   }, [lastJsonMessage]);
+
+  // Handle duplicate player error
+  useEffect(() => {
+    if (lastJsonMessage && lastJsonMessage.type === 'duplicatePlayerError') {
+      // TODO: Display error message
+      navigate(`/?error=${lastJsonMessage.data.message}`);
+    }
+  }, [lastJsonMessage, navigate]);
 
   // Notify join.
   useEffect(() => {
