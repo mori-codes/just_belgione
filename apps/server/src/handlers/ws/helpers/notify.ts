@@ -1,7 +1,10 @@
 import { ActiveGames, SocketMessage } from '@just-belgione/types';
 
 const notifyPlayer = (socket: WebSocket, message: SocketMessage) => {
-  socket.send(JSON.stringify(message));
+  // Only attempt to send a message if websocket is ready
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(message));
+  }
 };
 
 const notifyAll = (
@@ -12,7 +15,7 @@ const notifyAll = (
   if (!activeGames[roomId]) return;
   const sockets = Object.values(activeGames[roomId]) as WebSocket[];
   sockets.forEach((socket) => {
-    socket.send(JSON.stringify(message));
+    notifyPlayer(socket, message);
   });
 };
 
