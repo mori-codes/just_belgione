@@ -21,6 +21,10 @@
   background-image: url('/background-dark.png');
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .background {
   position: absolute;
   height: 100%;

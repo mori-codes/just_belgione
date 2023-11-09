@@ -5,7 +5,7 @@ import { Input } from '../common/Input';
 import { ButtonLink } from '../common/ButtonLink';
 
 const Join = () => {
-  const [roomId, setRoomId] = useState<Room['_id']>();
+  const [roomId, setRoomId] = useState<Room['_id']>("");
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({
     target: { value },
@@ -15,7 +15,7 @@ const Join = () => {
 
   return (
     <PageWrapper center>
-      <div className='flex flex-col gap-4 p-8'>
+      <div className='flex flex-col gap-4 p-8 w-full'>
       <Input
         label="Introduce el código de sala:"
         value={roomId}
