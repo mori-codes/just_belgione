@@ -121,7 +121,9 @@ const updateGameStatus = async (id: Room['_id'], status: RoomStatus) => {
         },
       },
       update: {
-        status,
+        $set: {
+          status,
+        },
       },
     }),
   });
