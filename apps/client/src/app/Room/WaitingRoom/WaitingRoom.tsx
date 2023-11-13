@@ -6,7 +6,7 @@ import {
   Player,
   StartGameMessage,
 } from '@just-belgione/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
 import { PageWrapper } from '../../components/common/PageWrapper';
 import { PlayerDisplay } from './PlayerDisplay';
@@ -29,7 +29,6 @@ const WaitingRoom: React.FC<Props> = ({
 }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [user] = useUser();
-  const wasJoinReqSent = useRef(false);
   const userCreatedTheRoom = players?.length && user === players[0];
   const navigate = useNavigate();
 
@@ -46,21 +45,6 @@ const WaitingRoom: React.FC<Props> = ({
       navigate(`/?error=${lastJsonMessage.data.message}`);
     }
   }, [lastJsonMessage, navigate]);
-
-  // Notify join.
-  useEffect(() => {
-    if (wasJoinReqSent.current || status !== 'WAITING' || !roomId || !user)
-      return;
-    const message: JoinGameMessage = {
-      type: 'join',
-      data: {
-        player: user,
-        roomId,
-      },
-    };
-    sendMessage(message);
-    wasJoinReqSent.current = true;
-  }, [roomId, user, status, sendMessage]);
 
   const handleStartGame = () => {
     sendMessage({

@@ -33,7 +33,11 @@ type Room = {
 type CreateRoomBody = Pick<Room, 'players'>;
 type CreateRoomResponse = { id: Room['_id'] };
 
-type ActiveGames = Record<string, Record<string, WebSocket>>;
+type ActiveRoom = {
+  status: RoomStatus
+  playerSockets: Record<string, WebSocket>;
+}
+type ActiveGames = Record<string, ActiveRoom>;
 
 // MONGO
 type MongoFindOneResponse<T> = {
@@ -81,6 +85,13 @@ type DuplicatedPlayerError = {
   };
 };
 
+type InvalidGameError = {
+  type: 'invalidGameError';
+  data: {
+    message: string;
+  };
+};
+
 // TODO: Maybe split types into two, server -> client and client -> server
 type SocketMessage = (
   | JoinGameMessage
@@ -88,6 +99,7 @@ type SocketMessage = (
   | StartGameMessage
   | NewRoundMessage
   | DuplicatedPlayerError
+  | InvalidGameError
 ) & {
   status: RoomStatus;
 };

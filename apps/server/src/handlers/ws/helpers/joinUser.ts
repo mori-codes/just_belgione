@@ -15,16 +15,19 @@ const joinUser = async ({
   socket: WebSocket;
 }) => {
   // Initialize room active game if it doesn't exist.
-  activeGames[roomId] ??= {};
+  activeGames[roomId] ??= { status: 'WAITING', playerSockets: {} };
+  const { status: gameStatus } = activeGames[roomId];
+
+  console.log(activeGames[roomId])
 
   // Check if the player is already in the game.
-  const existingPlayer = Object.keys(activeGames[roomId]).find(
+  const existingPlayer = Object.keys(activeGames[roomId].playerSockets).find(
     (playerName) => playerName === player
   );
 
   // If a different user is trying to join with the same name, intercept and return error
   if (existingPlayer) {
-    const playerSocket = activeGames[roomId][existingPlayer];
+    const playerSocket = activeGames[roomId].playerSockets[existingPlayer];
     if (playerSocket.readyState === WebSocket.OPEN) {
       notifyPlayer(socket, {
         type: 'duplicatePlayerError',
@@ -39,8 +42,20 @@ const joinUser = async ({
     }
   }
 
+  // If the game is already started, and user is not already inside, return error
+  if (gameStatus === 'PLAYING' && !existingPlayer) {
+    notifyPlayer(socket, {
+      type: 'invalidGameError',
+      data: {
+        message: 'The game you tried to join is already started.',
+      },
+      status: 'PLAYING',
+    });
+    return;
+  }
+
   // Add or update the new user to the activeGames mapping
-  activeGames[roomId][player] = socket;
+  activeGames[roomId].playerSockets[player] = socket;
 
   // Update the database. (if player is not already there)
   if (!existingPlayer) {
