@@ -161,12 +161,51 @@ const createRound = async (
         },
       },
       update: {
-        $push: {
-          rounds: newRound,
+        $set: {
+          currentRound: newRound,
         },
       },
     }),
   });
 };
 
-export { getRoom, createRoom, addPlayer, updateGameStatus, createRound };
+const addHint = async (id: Room['_id'], player: Player, hint: Word) => {
+  const BASE_URL = Deno.env.get('MONGO_BASE_URL');
+  const API_KEY = Deno.env.get('MONGO_API_KEY');
+  if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
+
+  const lelo = await fetch(`${BASE_URL}/action/updateOne`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': API_KEY,
+    },
+    body: JSON.stringify({
+      database: 'justone',
+      dataSource: 'Cluster',
+      collection: 'rooms',
+      filter: {
+        _id: {
+          $oid: id,
+        },
+      },
+      update: {
+        $push: {
+          'currentRound.hints': { player, hint },
+        },
+      },
+    }),
+  });
+
+  console.log(lelo, {player, hint})
+};
+
+export {
+  getRoom,
+  createRoom,
+  addPlayer,
+  updateGameStatus,
+  createRound,
+  addHint,
+};

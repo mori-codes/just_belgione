@@ -2,6 +2,7 @@ import { Router } from 'oak';
 import { ActiveGames, ClientMessage } from '@just-belgione/types';
 import { joinUser } from './helpers/joinUser.ts';
 import { startGame } from './helpers/startGame.ts';
+import { hintReceived } from "./helpers/hintReceived.ts";
 
 const BASE_URL = '/ws';
 
@@ -35,6 +36,10 @@ const setupWs = (router: Router) => {
           break;
         case 'start':
           startGame(activeGames, message.data.roomId);
+          break;
+        case 'sendHint':
+          // TODO: Make parameters an object
+          hintReceived(activeGames, message.data.hint, message.data.player, message.data.roomId);
           break;
       }
     };

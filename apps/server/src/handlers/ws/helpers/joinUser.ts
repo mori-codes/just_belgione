@@ -18,8 +18,6 @@ const joinUser = async ({
   activeGames[roomId] ??= { status: 'WAITING', playerSockets: {} };
   const { status: gameStatus } = activeGames[roomId];
 
-  console.log(activeGames[roomId])
-
   // Check if the player is already in the game.
   const existingPlayer = Object.keys(activeGames[roomId].playerSockets).find(
     (playerName) => playerName === player
