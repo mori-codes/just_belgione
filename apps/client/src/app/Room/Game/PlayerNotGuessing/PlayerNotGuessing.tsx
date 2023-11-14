@@ -1,21 +1,32 @@
-import { ClientMessage, Hint, ServerMessage, Word } from '@just-belgione/types';
+import {
+  ClientMessage,
+  Hint,
+  Player,
+  ServerMessage,
+  Word,
+} from '@just-belgione/types';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 import { useUser } from '../../../atoms/userAtom';
 import { useParams } from 'react-router-dom';
+import { getPlayerColor } from '../../../helpers/getPlayerColor';
 
 type Props = {
   wordToGuess: Word;
+  players: Player[];
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: ClientMessage) => void;
 };
 
 const PlayerNotGuessing: React.FC<Props> = ({
   wordToGuess,
+  players,
   lastJsonMessage,
   sendMessage,
 }) => {
   const [hint, setHint] = useState<Word>('');
-  const [hintWasSent, setHintWasSent] = useState<boolean>(false);
+  const [status, setStatus] = useState<
+    'noHintProvided' | 'hintProvided' | 'allHintsProvided'
+  >('noHintProvided');
   const [hints, setHints] = useState<Hint[]>([]);
   const [user] = useUser();
   const { id: roomId } = useParams();
@@ -27,10 +38,13 @@ const PlayerNotGuessing: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (lastJsonMessage?.type === 'hintReceived') {
-      setHints(lastJsonMessage.data.hints);
+    if (lastJsonMessage?.type !== 'hintReceived') return;
+
+    setHints(lastJsonMessage.data.hints);
+    if (lastJsonMessage.data.hints.length === players.length) {
+      setStatus('allHintsProvided');
     }
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, players]);
 
   const handleSend = () => {
     if (!roomId) return;
@@ -42,19 +56,27 @@ const PlayerNotGuessing: React.FC<Props> = ({
         roomId,
       },
     });
-    setHintWasSent(true);
+    setStatus('hintProvided');
   };
 
-  return hintWasSent ? (
-    <BeforeSendingHint
-      wordToGuess={wordToGuess}
-      hint={hint}
-      onChange={handleHintChange}
-      onSend={handleSend}
-    />
-  ) : (
-    <AfterSendingHint hints={hints} />
-  );
+  switch (status) {
+    case 'noHintProvided':
+      return (
+        <BeforeSendingHint
+          wordToGuess={wordToGuess}
+          hint={hint}
+          onChange={handleHintChange}
+          onSend={handleSend}
+        />
+      );
+    case 'hintProvided':
+      return <AfterSendingHint hints={hints} players={players} />;
+
+    case 'allHintsProvided':
+      return (
+        <AllHintsProvided hints={hints} setHints={setHints} players={players} />
+      );
+  }
 };
 
 const BeforeSendingHint: React.FC<{
@@ -80,20 +102,70 @@ const BeforeSendingHint: React.FC<{
   </div>
 );
 
-const AfterSendingHint: React.FC<{ hints: Hint[] }> = ({ hints }) => (
+const AfterSendingHint: React.FC<{ hints: Hint[]; players: Player[] }> = ({
+  hints,
+  players,
+}) => (
   <div>
     <div>Esperando a todos</div>
     <div>
       <ul>
-        {hints.map(({ player, hint }) => (
-          <li>
-            {player}: {hint}
-          </li>
-        ))}
+        {hints.map(({ player, hint }) => {
+          const playerIndex = players.findIndex((p) => p === player);
+          return (
+            <li className={getPlayerColor(playerIndex)}>
+              {player}: {hint}
+            </li>
+          );
+        })}
       </ul>
     </div>
-    <div>TODO: Contador de players</div>
+    <div>
+      {hints.length}/{players.length}
+    </div>
   </div>
 );
+
+const AllHintsProvided: React.FC<{
+  hints: Hint[];
+  setHints: React.Dispatch<React.SetStateAction<Hint[]>>;
+  players: Player[];
+}> = ({ hints, setHints, players }) => {
+  const handleClick = (index: number) => () => {
+    setHints((prev) => {
+      prev[index] = { ...prev[index], isValid: !prev[index].isValid };
+      return prev;
+    });
+  };
+
+  const handleSend = () => {
+    // TODO: Implement send invalid hints.
+  };
+
+  return (
+    <div>
+      <h2>¡Ya están todos!</h2>
+      <p>Ahora toca descartar las pistas que consideréis idénticas</p>
+      <div>
+        <ul>
+          {hints.map(({ player, hint, isValid }, index) => {
+            const playerIndex = players.findIndex((p) => p === player);
+            return (
+              <li
+                className={getPlayerColor(playerIndex)}
+                onClick={handleClick(index)}
+              >
+                {player}: {hint} {!isValid ? 'X' : ''}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <button type="button" onClick={handleSend}>
+        Continue
+      </button>
+    </div>
+  );
+};
 
 export { PlayerNotGuessing };
