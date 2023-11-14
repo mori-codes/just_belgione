@@ -28,7 +28,7 @@ type Room = {
   players: Player[];
   status: RoomStatus;
   rounds: Round[];
-  currentRound: Round
+  currentRound?: Round
 };
 
 type CreateRoomBody = Pick<Room, 'players'>;
