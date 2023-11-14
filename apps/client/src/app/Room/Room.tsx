@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useGetRoom } from '../resources/room/room.hooks';
 import useWebSocket from 'react-use-websocket';
-import { JoinGameMessage, ServerMessage } from '@just-belgione/types';
+import { JoinGameMessage, Player, ServerMessage } from '@just-belgione/types';
 import { WaitingRoom } from './WaitingRoom/WaitingRoom';
 import { Game } from './Game/Game';
 import { GameOver } from './GameOver/GameOver';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUser } from '../atoms/userAtom';
 
 const BASE_URL = process.env.NX_REACT_APP_WS_URL;
@@ -14,6 +14,7 @@ const PATH = '/ws';
 const Room = () => {
   const { id } = useParams();
   const [user] = useUser();
+  const [players, setPlayers] = useState<Player[]>([]);
   const { data: room, isLoading } = useGetRoom(id);
   const wasJoinReqSent = useRef(false);
 
@@ -45,9 +46,10 @@ const Room = () => {
     return (
       <WaitingRoom
         roomId={id}
-        status={status}
         lastJsonMessage={lastJsonMessage}
         sendMessage={sendJsonMessage}
+        players={players}
+        setPlayers={setPlayers}
       />
     );
   }

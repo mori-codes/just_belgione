@@ -6,7 +6,7 @@ import {
   StartGameMessage,
   ServerMessage,
 } from '@just-belgione/types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useUser } from '../../atoms/userAtom';
 import { PageWrapper } from '../../components/common/PageWrapper';
 import { PlayerDisplay } from './PlayerDisplay';
@@ -16,18 +16,19 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
   roomId: Room['_id'];
-  status: RoomStatus;
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: JoinGameMessage | StartGameMessage) => void;
+  players: Player[];
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
 };
 
 const WaitingRoom: React.FC<Props> = ({
   roomId,
-  status,
   lastJsonMessage,
   sendMessage,
+  players,
+  setPlayers,
 }) => {
-  const [players, setPlayers] = useState<Player[]>([]);
   const [user] = useUser();
   const userCreatedTheRoom = players?.length && user === players[0];
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const WaitingRoom: React.FC<Props> = ({
   useEffect(() => {
     if (!lastJsonMessage || lastJsonMessage.type !== 'playerJoined') return;
     setPlayers(lastJsonMessage.data.players);
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, setPlayers]);
 
   // Handle duplicate player error
   useEffect(() => {
