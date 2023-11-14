@@ -133,8 +133,9 @@ const AllHintsProvided: React.FC<{
 }> = ({ hints, setHints, players }) => {
   const handleClick = (index: number) => () => {
     setHints((prev) => {
-      prev[index] = { ...prev[index], isValid: !prev[index].isValid };
-      return prev;
+      const hints = [...prev];
+      hints[index] = { ...hints[index], isValid: !hints[index].isValid };
+      return hints;
     });
   };
 
@@ -155,7 +156,7 @@ const AllHintsProvided: React.FC<{
                 className={getPlayerColor(playerIndex)}
                 onClick={handleClick(index)}
               >
-                {player}: {hint} {!isValid ? 'X' : ''}
+                {player}: {hint} {isValid === false ? 'X' : ''}
               </li>
             );
           })}
