@@ -1,4 +1,9 @@
-import { ClientMessage, Round, ServerMessage } from '@just-belgione/types';
+import {
+  ClientMessage,
+  Player,
+  Round,
+  ServerMessage,
+} from '@just-belgione/types';
 import { useEffect, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
 import { PlayerGuessing } from './PlayerGuessing/PlayerGuessing';
@@ -6,11 +11,12 @@ import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
+  players: Player[];
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: ClientMessage) => void;
 };
 
-const Game: React.FC<Props> = ({ lastJsonMessage, sendMessage }) => {
+const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   const [user] = useUser();
   const [state, setState] = useState<Round>();
   const iAmGuessing = state?.playerGuessing === user;
@@ -36,6 +42,7 @@ const Game: React.FC<Props> = ({ lastJsonMessage, sendMessage }) => {
       wordToGuess={state?.wordToGuess || ''}
       sendMessage={sendMessage}
       lastJsonMessage={lastJsonMessage}
+      players={players}
     />
   );
 };

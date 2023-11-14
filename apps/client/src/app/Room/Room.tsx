@@ -56,7 +56,11 @@ const Room = () => {
 
   if (status === 'PLAYING') {
     return (
-      <Game lastJsonMessage={lastJsonMessage} sendMessage={sendJsonMessage} />
+      <Game
+        players={players}
+        lastJsonMessage={lastJsonMessage}
+        sendMessage={sendJsonMessage}
+      />
     );
   }
 
