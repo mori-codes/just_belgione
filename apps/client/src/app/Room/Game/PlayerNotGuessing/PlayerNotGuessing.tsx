@@ -41,7 +41,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
     if (lastJsonMessage?.type !== 'hintReceived') return;
 
     setHints(lastJsonMessage.data.hints);
-    if (lastJsonMessage.data.hints.length === players.length) {
+    if (lastJsonMessage.data.hints.length === players.length - 1) {
       setStatus('allHintsProvided');
     }
   }, [lastJsonMessage, players]);
