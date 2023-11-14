@@ -91,7 +91,7 @@ type SendHintMessage = {
   type: 'sendHint';
   data: {
     player: Player;
-    roomId: string;
+    roomId: Room['_id'];
     hint: Word;
   };
 };
@@ -140,5 +140,7 @@ export type {
   StartGameMessage,
   Round,
   Word,
+  SendHintMessage,
+  Hint,
 };
 export { isCreateRoomBody };

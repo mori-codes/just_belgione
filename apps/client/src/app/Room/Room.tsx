@@ -53,7 +53,9 @@ const Room = () => {
   }
 
   if (status === 'PLAYING') {
-    return <Game lastJsonMessage={lastJsonMessage} />;
+    return (
+      <Game lastJsonMessage={lastJsonMessage} sendMessage={sendJsonMessage} />
+    );
   }
 
   if (status === 'FINISHED') {
