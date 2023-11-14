@@ -1,4 +1,8 @@
-interface Props {}
+import { ServerMessage } from "@just-belgione/types";
+
+type Props = {
+  lastJsonMessage: ServerMessage;
+}
 
 const PlayerGuessing: React.FC<Props> = () => {
   return (

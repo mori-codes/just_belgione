@@ -34,9 +34,9 @@ type CreateRoomBody = Pick<Room, 'players'>;
 type CreateRoomResponse = { id: Room['_id'] };
 
 type ActiveRoom = {
-  status: RoomStatus
+  status: RoomStatus;
   playerSockets: Record<string, WebSocket>;
-}
+};
 type ActiveGames = Record<string, ActiveRoom>;
 
 // MONGO
@@ -49,25 +49,11 @@ type MongoInsertResponse = {
 };
 
 // SOCKET MESSAGES
-type JoinGameMessage = {
-  type: 'join';
-  data: {
-    roomId: string;
-    player: Player;
-  };
-};
-
+// Server messages
 type PlayerJoinedMessage = {
   type: 'playerJoined';
   data: {
     players: Player[];
-  };
-};
-
-type StartGameMessage = {
-  type: 'start';
-  data: {
-    roomId: string;
   };
 };
 
@@ -78,6 +64,39 @@ type NewRoundMessage = {
   };
 };
 
+type HintReceivedMessage = {
+  type: 'hintReceived';
+  data: {
+    hints: Hint[];
+  };
+};
+
+// Client messages
+type JoinGameMessage = {
+  type: 'join';
+  data: {
+    roomId: string;
+    player: Player;
+  };
+};
+
+type StartGameMessage = {
+  type: 'start';
+  data: {
+    roomId: string;
+  };
+};
+
+type SendHintMessage = {
+  type: 'sendHint';
+  data: {
+    player: Player;
+    roomId: string;
+    hint: Word;
+  };
+};
+
+// Error messages
 type DuplicatedPlayerError = {
   type: 'duplicatePlayerError';
   data: {
@@ -92,23 +111,19 @@ type InvalidGameError = {
   };
 };
 
-// TODO: Maybe split types into two, server -> client and client -> server
-type SocketMessage = (
-  | JoinGameMessage
+type ServerMessage = (
   | PlayerJoinedMessage
-  | StartGameMessage
   | NewRoundMessage
   | DuplicatedPlayerError
   | InvalidGameError
-) & {
-  status: RoomStatus;
-};
+  | HintReceivedMessage
+) & { status: RoomStatus };
+
+type ClientMessage = JoinGameMessage | StartGameMessage | SendHintMessage;
 
 // TYPE GUARDS
-const isCreateRoomBody = (obj: any): obj is CreateRoomBody => {
-  if (!obj?.players === undefined) return false;
-  return true;
-};
+const isCreateRoomBody = (obj: any): obj is CreateRoomBody =>
+  !obj?.players !== undefined;
 
 export type {
   MongoFindOneResponse,
@@ -118,7 +133,8 @@ export type {
   RoomStatus,
   CreateRoomBody,
   CreateRoomResponse,
-  SocketMessage,
+  ServerMessage,
+  ClientMessage,
   JoinGameMessage,
   ActiveGames,
   StartGameMessage,

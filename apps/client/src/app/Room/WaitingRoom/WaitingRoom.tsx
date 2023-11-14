@@ -2,9 +2,9 @@ import {
   RoomStatus,
   JoinGameMessage,
   Room,
-  SocketMessage,
   Player,
   StartGameMessage,
+  ServerMessage,
 } from '@just-belgione/types';
 import { useEffect, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
@@ -14,12 +14,12 @@ import { Button } from '../../components/common/Button';
 import { RoomCode } from './RoomCode';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
+type Props = {
   roomId: Room['_id'];
   status: RoomStatus;
-  lastJsonMessage: SocketMessage;
+  lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: JoinGameMessage | StartGameMessage) => void;
-}
+};
 
 const WaitingRoom: React.FC<Props> = ({
   roomId,

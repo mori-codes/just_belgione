@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useGetRoom } from '../resources/room/room.hooks';
 import useWebSocket from 'react-use-websocket';
-import { JoinGameMessage, SocketMessage } from '@just-belgione/types';
+import { JoinGameMessage, ServerMessage } from '@just-belgione/types';
 import { WaitingRoom } from './WaitingRoom/WaitingRoom';
 import { Game } from './Game/Game';
 import { GameOver } from './GameOver/GameOver';
@@ -17,7 +17,7 @@ const Room = () => {
   const { data: room, isLoading } = useGetRoom(id);
   const wasJoinReqSent = useRef(false);
 
-  const { sendJsonMessage, lastJsonMessage } = useWebSocket<SocketMessage>(
+  const { sendJsonMessage, lastJsonMessage } = useWebSocket<ServerMessage>(
     `${BASE_URL}${PATH}`
   );
   const status = lastJsonMessage?.status || room?.status;

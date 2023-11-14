@@ -1,5 +1,5 @@
 import { Router } from 'oak';
-import { ActiveGames, SocketMessage } from '@just-belgione/types';
+import { ActiveGames, ClientMessage } from '@just-belgione/types';
 import { joinUser } from './helpers/joinUser.ts';
 import { startGame } from './helpers/startGame.ts';
 
@@ -23,7 +23,7 @@ const setupWs = (router: Router) => {
 
     socket.onopen = () => {};
     socket.onmessage = (event) => {
-      const message = JSON.parse(event.data) as SocketMessage;
+      const message = JSON.parse(event.data) as ClientMessage;
       switch (message.type) {
         case 'join':
           joinUser({

@@ -1,12 +1,12 @@
-import { Round, SocketMessage } from '@just-belgione/types';
+import { Round, ServerMessage } from '@just-belgione/types';
 import { useEffect, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
 import { PlayerGuessing } from './PlayerGuessing/PlayerGuessing';
 import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  lastJsonMessage: SocketMessage;
+type Props = {
+  lastJsonMessage: ServerMessage;
 }
 
 const Game: React.FC<Props> = ({ lastJsonMessage }) => {
@@ -29,7 +29,7 @@ const Game: React.FC<Props> = ({ lastJsonMessage }) => {
   }, [lastJsonMessage, navigate]);
 
   return iAmGuessing ? (
-    <PlayerGuessing />
+    <PlayerGuessing lastJsonMessage={lastJsonMessage}/>
   ) : (
     <PlayerNotGuessing wordToGuess={state?.wordToGuess || ''} />
   );

@@ -1,7 +1,7 @@
 import { Word } from '@just-belgione/types';
 import { ChangeEventHandler, useState } from 'react';
 
-interface Props {
+type Props = {
   wordToGuess: Word;
 }
 
