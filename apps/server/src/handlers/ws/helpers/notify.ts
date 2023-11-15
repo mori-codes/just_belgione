@@ -13,7 +13,17 @@ const notifyAll = (
   message: ServerMessage
 ) => {
   if (!activeGames[roomId]) return;
-  const sockets = Object.values(activeGames[roomId].playerSockets) as WebSocket[];
+  console.log(
+    'Notifying following players: ',
+    Object.keys(activeGames[roomId].playerSockets),
+    '\nwith message: ',
+    message,
+    '\nroomID: ',
+    roomId
+  );
+  const sockets = Object.values(
+    activeGames[roomId].playerSockets
+  ) as WebSocket[];
   sockets.forEach((socket) => {
     notifyPlayer(socket, message);
   });
