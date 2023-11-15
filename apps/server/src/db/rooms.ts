@@ -174,7 +174,7 @@ const addHint = async (id: Room['_id'], player: Player, hint: Word) => {
   const API_KEY = Deno.env.get('MONGO_API_KEY');
   if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
 
-  const lelo = await fetch(`${BASE_URL}/action/updateOne`, {
+  await fetch(`${BASE_URL}/action/updateOne`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -197,8 +197,6 @@ const addHint = async (id: Room['_id'], player: Player, hint: Word) => {
       },
     }),
   });
-
-  console.log(lelo, {player, hint})
 };
 
 export {

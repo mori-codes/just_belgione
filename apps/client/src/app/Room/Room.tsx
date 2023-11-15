@@ -19,7 +19,11 @@ const Room = () => {
   const wasJoinReqSent = useRef(false);
 
   const { sendJsonMessage, lastJsonMessage } = useWebSocket<ServerMessage>(
-    `${BASE_URL}${PATH}`
+    `${BASE_URL}${PATH}`,
+    {
+      onOpen: () => console.log("Como que abierto"),
+      onClose: () => console.log("Como que cerrado"),
+    }
   );
   const status = lastJsonMessage?.status || room?.status;
 
