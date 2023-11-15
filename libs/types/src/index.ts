@@ -28,7 +28,7 @@ type Room = {
   players: Player[];
   status: RoomStatus;
   rounds: Round[];
-  currentRound?: Round
+  currentRound?: Round;
 };
 
 type CreateRoomBody = Pick<Room, 'players'>;
@@ -73,14 +73,6 @@ type HintReceivedMessage = {
 };
 
 // Client messages
-type JoinGameMessage = {
-  type: 'join';
-  data: {
-    roomId: string;
-    player: Player;
-  };
-};
-
 type StartGameMessage = {
   type: 'start';
   data: {
@@ -120,7 +112,7 @@ type ServerMessage = (
   | HintReceivedMessage
 ) & { status: RoomStatus };
 
-type ClientMessage = JoinGameMessage | StartGameMessage | SendHintMessage;
+type ClientMessage = StartGameMessage | SendHintMessage;
 
 // TYPE GUARDS
 const isCreateRoomBody = (obj: any): obj is CreateRoomBody =>
@@ -136,7 +128,6 @@ export type {
   CreateRoomResponse,
   ServerMessage,
   ClientMessage,
-  JoinGameMessage,
   ActiveGames,
   StartGameMessage,
   Round,

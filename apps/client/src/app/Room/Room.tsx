@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useGetRoom } from '../resources/room/room.hooks';
 import useWebSocket from 'react-use-websocket';
-import { JoinGameMessage, Player, ServerMessage } from '@just-belgione/types';
+import { Player, ServerMessage } from '@just-belgione/types';
 import { WaitingRoom } from './WaitingRoom/WaitingRoom';
 import { Game } from './Game/Game';
 import { GameOver } from './GameOver/GameOver';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useUser } from '../atoms/userAtom';
 
 const BASE_URL = process.env.NX_REACT_APP_WS_URL;
@@ -13,30 +13,27 @@ const PATH = '/ws';
 
 const Room = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [user] = useUser();
   const [players, setPlayers] = useState<Player[]>([]);
   const { data: room, isLoading } = useGetRoom(id);
-  const wasJoinReqSent = useRef(false);
+
+  // If the room is not ready, do not trigger a socket connection
+  const socketUrl =
+    room?.status === 'FINISHED' || !room?._id || !user
+      ? null
+      : `${BASE_URL}${PATH}?roomId=${id}&player=${user}${
+          location.state?.newRoom ? '&newRoom=true' : ''
+        }`;
 
   const { sendJsonMessage, lastJsonMessage } = useWebSocket<ServerMessage>(
-    `${BASE_URL}${PATH}`
+    socketUrl,
+    {
+      reconnectInterval: 1000,
+    }
   );
-  const status = lastJsonMessage?.status || room?.status;
 
-  // Notify join.
-  useEffect(() => {
-    if (wasJoinReqSent.current || status === 'FINISHED' || !room?._id || !user)
-      return;
-    const message: JoinGameMessage = {
-      type: 'join',
-      data: {
-        player: user,
-        roomId: room._id,
-      },
-    };
-    sendJsonMessage(message);
-    wasJoinReqSent.current = true;
-  }, [room, user, status, sendJsonMessage]);
+  const status = lastJsonMessage?.status || room?.status;
 
   if (isLoading || !status || !id) {
     return <>Loading...</>;

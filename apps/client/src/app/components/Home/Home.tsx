@@ -19,7 +19,7 @@ const Home = () => {
 
   const handleCreateRoom = async () => {
     const { id } = await mutateAsync({ players: [] });
-    navigate(`/room/${id}`);
+    navigate(`/room/${id}`, { state: { newRoom: true } });
   };
 
   return (
