@@ -1,6 +1,4 @@
 import {
-  RoomStatus,
-  JoinGameMessage,
   Room,
   Player,
   StartGameMessage,
@@ -17,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
   roomId: Room['_id'];
   lastJsonMessage: ServerMessage;
-  sendMessage: (jsonMessage: JoinGameMessage | StartGameMessage) => void;
+  sendMessage: (jsonMessage: StartGameMessage) => void;
   players: Player[];
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
 };
