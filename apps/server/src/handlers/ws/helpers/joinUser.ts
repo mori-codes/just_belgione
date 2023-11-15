@@ -78,7 +78,7 @@ const joinUser = async ({
     data: {
       players: room.players,
     },
-    status: 'WAITING',
+    status: room.status,
   });
 };
 

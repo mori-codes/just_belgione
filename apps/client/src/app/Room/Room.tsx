@@ -29,6 +29,7 @@ const Room = () => {
   const { sendJsonMessage, lastJsonMessage } = useWebSocket<ServerMessage>(
     socketUrl,
     {
+      shouldReconnect: () => true,
       reconnectInterval: 1000,
     }
   );
