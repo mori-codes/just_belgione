@@ -11,6 +11,7 @@ import { PlayerDisplay } from './PlayerDisplay';
 import { Button } from '../../components/common/Button';
 import { RoomCode } from './RoomCode';
 import { useNavigate } from 'react-router-dom';
+import { useNotificationContext } from '../../context/NotificationContext';
 
 type Props = {
   roomId: Room['_id'];
@@ -30,6 +31,7 @@ const WaitingRoom: React.FC<Props> = ({
   const [user] = useUser();
   const userCreatedTheRoom = players?.length && user === players[0];
   const navigate = useNavigate();
+  const { enqueueError } = useNotificationContext();
 
   // Update the list of players
   useEffect(() => {
@@ -40,10 +42,10 @@ const WaitingRoom: React.FC<Props> = ({
   // Handle duplicate player error
   useEffect(() => {
     if (lastJsonMessage && lastJsonMessage.type === 'duplicatePlayerError') {
-      // TODO: Display error message
-      navigate(`/?error=${lastJsonMessage.data.message}`);
+      enqueueError(lastJsonMessage.data.message)
+      navigate('/');
     }
-  }, [lastJsonMessage, navigate]);
+  }, [enqueueError, lastJsonMessage, navigate]);
 
   const handleStartGame = () => {
     sendMessage({

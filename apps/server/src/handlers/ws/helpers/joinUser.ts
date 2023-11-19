@@ -38,7 +38,7 @@ const joinUser = async ({
         type: 'duplicatePlayerError',
         data: {
           message:
-            'There is already a player in this room with the same name, please choose another one.',
+            'Ya hay un jugador con tu nombre en la sala',
         },
         status: 'WAITING',
       });
@@ -52,7 +52,7 @@ const joinUser = async ({
     notifyPlayer(socket, {
       type: 'invalidGameError',
       data: {
-        message: 'The game you tried to join is already started.',
+        message: '¡La partida a la que te intentas unir ya ha empezado!',
       },
       status: 'PLAYING',
     });

@@ -9,6 +9,7 @@ import { useUser } from '../../atoms/userAtom';
 import { PlayerGuessing } from './PlayerGuessing/PlayerGuessing';
 import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
+import { useNotificationContext } from '../../context/NotificationContext';
 
 type Props = {
   players: Player[];
@@ -21,6 +22,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   const [state, setState] = useState<Round>();
   const iAmGuessing = state?.playerGuessing === user;
   const navigate = useNavigate();
+  const { enqueueError } = useNotificationContext();
 
   useEffect(() => {
     if (!lastJsonMessage || lastJsonMessage?.type !== 'newRound') return;
@@ -30,10 +32,10 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   // Handle invalid room error
   useEffect(() => {
     if (lastJsonMessage && lastJsonMessage.type === 'invalidGameError') {
-      // TODO: Display error message
-      navigate(`/?error=${lastJsonMessage.data.message}`);
+      enqueueError(lastJsonMessage.data.message);
+      navigate('/');
     }
-  }, [lastJsonMessage, navigate]);
+  }, [enqueueError, lastJsonMessage, navigate]);
 
   return iAmGuessing ? (
     <PlayerGuessing lastJsonMessage={lastJsonMessage} />
