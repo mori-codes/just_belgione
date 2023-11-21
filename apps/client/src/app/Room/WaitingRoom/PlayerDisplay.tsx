@@ -8,7 +8,7 @@ type Props = {
 const getPlayers = (players: Player[]) =>
   players.map((player, index) => (
     <li className="flex text-jo-sm items-center gap-4" key={player}>
-      <div className={`h-4 w-4 shrink-0 ${getPlayerColor(index)}`} />
+      <div className={`h-4 w-4 shrink-0 bg-${getPlayerColor(index)}`} />
       <span className='truncate'>{player}</span>
     </li>
   ));

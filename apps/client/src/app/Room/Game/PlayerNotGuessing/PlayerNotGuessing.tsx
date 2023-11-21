@@ -5,10 +5,11 @@ import {
   ServerMessage,
   Word,
 } from '@just-belgione/types';
-import { ChangeEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '../../../atoms/userAtom';
 import { useParams } from 'react-router-dom';
 import { getPlayerColor } from '../../../helpers/getPlayerColor';
+import { SendHintScreen } from './SendHintScreen';
 
 type Props = {
   wordToGuess: Word;
@@ -23,19 +24,12 @@ const PlayerNotGuessing: React.FC<Props> = ({
   lastJsonMessage,
   sendMessage,
 }) => {
-  const [hint, setHint] = useState<Word>('');
   const [status, setStatus] = useState<
     'noHintProvided' | 'hintProvided' | 'allHintsProvided'
   >('noHintProvided');
   const [hints, setHints] = useState<Hint[]>([]);
   const [user] = useUser();
   const { id: roomId } = useParams();
-
-  const handleHintChange: ChangeEventHandler<HTMLInputElement> = ({
-    target: { value },
-  }) => {
-    setHint(value);
-  };
 
   useEffect(() => {
     if (lastJsonMessage?.type !== 'hintReceived') return;
@@ -46,7 +40,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
     }
   }, [lastJsonMessage, players]);
 
-  const handleSend = () => {
+  const handleSend = (hint: Word) => {
     if (!roomId) return;
     sendMessage({
       type: 'sendHint',
@@ -62,12 +56,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
   switch (status) {
     case 'noHintProvided':
       return (
-        <BeforeSendingHint
-          wordToGuess={wordToGuess}
-          hint={hint}
-          onChange={handleHintChange}
-          onSend={handleSend}
-        />
+        <SendHintScreen wordToGuess={wordToGuess} onSend={handleSend} playerIndex={players.findIndex((p) => p === user)}/>
       );
     case 'hintProvided':
       return <AfterSendingHint hints={hints} players={players} />;
@@ -78,29 +67,6 @@ const PlayerNotGuessing: React.FC<Props> = ({
       );
   }
 };
-
-const BeforeSendingHint: React.FC<{
-  wordToGuess: Word;
-  hint: Word;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onSend: () => void;
-}> = ({ wordToGuess, hint, onChange, onSend }) => (
-  <div>
-    <div>
-      La palabra es:
-      <h2>{wordToGuess}</h2>
-    </div>
-    <div>
-      <input
-        type="text"
-        value={hint}
-        onChange={onChange}
-        placeholder="Escribe aquí tu pista"
-      />
-      <button onClick={onSend}>Enviar</button>
-    </div>
-  </div>
-);
 
 const AfterSendingHint: React.FC<{ hints: Hint[]; players: Player[] }> = ({
   hints,
