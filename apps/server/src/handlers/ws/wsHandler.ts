@@ -2,8 +2,8 @@ import { Router } from 'oak';
 import { ActiveGames, ClientMessage } from '@just-belgione/types';
 import { joinUser } from './helpers/joinUser.ts';
 import { startGame } from './helpers/startGame.ts';
-import { hintReceived } from "./helpers/hintReceived.ts";
-import { createRoom } from "./helpers/createRoom.ts";
+import { hintReceived } from './helpers/hintReceived.ts';
+import { createRoom } from './helpers/createRoom.ts';
 
 const BASE_URL = '/ws';
 
@@ -16,29 +16,29 @@ const activeGames: ActiveGames = {};
 
 const setupWs = (router: Router) => {
   router.get(BASE_URL, (ctx) => {
-
     if (!ctx.isUpgradable) {
       ctx.throw(501);
       return;
     }
-    
+
     const socket = ctx.upgrade();
 
+    // TODO: Investigate how to work with sockets.
     socket.onopen = () => {
       const player = ctx.request.url.searchParams.get('player');
       const roomId = ctx.request.url.searchParams.get('roomId');
-      const newRoom = ctx.request.url.searchParams.get('newRoom') === "true";
+      const newRoom = ctx.request.url.searchParams.get('newRoom') === 'true';
 
-      if(!player || !roomId) {
+      if (!player || !roomId) {
         ctx.throw(400);
         return;
       }
 
-      if(newRoom) {
+      if (newRoom) {
         createRoom({
           activeGames,
-          roomId
-        })
+          roomId,
+        });
       }
 
       joinUser({
@@ -46,9 +46,9 @@ const setupWs = (router: Router) => {
         player,
         roomId,
         socket,
-      })
+      });
     };
-    
+
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data) as ClientMessage;
       switch (message.type) {
@@ -57,7 +57,12 @@ const setupWs = (router: Router) => {
           break;
         case 'sendHint':
           // TODO: Make parameters an object
-          hintReceived(activeGames, message.data.hint, message.data.player, message.data.roomId);
+          hintReceived(
+            activeGames,
+            message.data.hint,
+            message.data.player,
+            message.data.roomId
+          );
           break;
       }
     };
