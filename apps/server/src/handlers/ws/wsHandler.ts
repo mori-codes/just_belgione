@@ -4,6 +4,7 @@ import { joinUser } from './helpers/joinUser.ts';
 import { startGame } from './helpers/startGame.ts';
 import { hintReceived } from './helpers/hintReceived.ts';
 import { createRoom } from './helpers/createRoom.ts';
+import { confirmHints } from './helpers/confirmHints.ts';
 
 const BASE_URL = '/ws';
 
@@ -63,6 +64,9 @@ const setupWs = (router: Router) => {
             message.data.player,
             message.data.roomId
           );
+          break;
+        case 'confirmHints':
+          confirmHints(activeGames, message.data.roomId, message.data.hints);
           break;
       }
     };

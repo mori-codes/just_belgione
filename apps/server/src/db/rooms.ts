@@ -7,6 +7,7 @@ import {
   RoomStatus,
   Round,
   Word,
+  Hint,
 } from '@just-belgione/types';
 
 const getRoom = async (id: string) => {
@@ -199,6 +200,36 @@ const addHint = async (id: Room['_id'], player: Player, hint: Word) => {
   });
 };
 
+const saveHints = async (id: Room['_id'], hints: Hint[]) => {
+  const BASE_URL = Deno.env.get('MONGO_BASE_URL');
+  const API_KEY = Deno.env.get('MONGO_API_KEY');
+  if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
+
+  await fetch(`${BASE_URL}/action/updateOne`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': API_KEY,
+    },
+    body: JSON.stringify({
+      database: 'justone',
+      dataSource: 'Cluster',
+      collection: 'rooms',
+      filter: {
+        _id: {
+          $oid: id,
+        },
+      },
+      update: {
+        $set: {
+          'currentRound.hints': hints,
+        },
+      },
+    }),
+  });
+};
+
 export {
   getRoom,
   createRoom,
@@ -206,4 +237,5 @@ export {
   updateGameStatus,
   createRound,
   addHint,
+  saveHints,
 };

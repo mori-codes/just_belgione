@@ -72,13 +72,16 @@ type HintReceivedMessage = {
   };
 };
 
+// This is new.
 type FinalHintsMessage = {
   type: 'finalHints';
   data: {
-    hints: Hint[];
+    validHints: Hint[];
+    playerGuessing: Player;
   };
 };
 
+// This is new.
 type RoundResultMessage = {
   type: 'roundResult';
   data: {
@@ -107,6 +110,7 @@ type SendHintMessage = {
   };
 };
 
+// This is new.
 type ConfirmHintsMessage = {
   type: 'confirmHints';
   data: {
@@ -115,6 +119,7 @@ type ConfirmHintsMessage = {
   };
 };
 
+// This is new.
 type GuessMessage = {
   type: 'guess';
   data: {
@@ -123,12 +128,13 @@ type GuessMessage = {
   };
 };
 
+// This is new.
 type StartRoundMessage = {
-  type: "newRound";
+  type: 'newRound';
   data: {
     roomId: Room['_id'];
-  }
-}
+  };
+};
 
 // Error messages
 type DuplicatedPlayerError = {
@@ -186,6 +192,6 @@ export type {
   GuessMessage,
   RoundResultMessage,
   FinalHintsMessage,
-  StartRoundMessage
+  StartRoundMessage,
 };
 export { isCreateRoomBody };
