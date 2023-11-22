@@ -14,7 +14,6 @@ const startRound = async (activeGames: ActiveGames, roomId: Room['_id']) => {
   const playerGuessingIndex = isFirstRound
     ? 0 // The player who created the room will be the first one guessing
     : (rounds.length + 1) % players.length;
-  console.log(playerGuessingIndex);
 
   const playerGuessing = Object.keys(activeGames[roomId].playerSockets)[
     playerGuessingIndex

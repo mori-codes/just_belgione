@@ -28,7 +28,6 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   useEffect(() => {
     if (!lastJsonMessage || lastJsonMessage?.type !== 'newRound') return;
     setState(lastJsonMessage.data.round);
-    console.log(lastJsonMessage.data.round.playerGuessing)
   }, [lastJsonMessage]);
 
   // Handle invalid room error
