@@ -10,6 +10,7 @@ import { useUser } from '../../../atoms/userAtom';
 import { useParams } from 'react-router-dom';
 import { getPlayerColor } from '../../../helpers/getPlayerColor';
 import { SendHintScreen } from './SendHintScreen';
+import { AllHintsProvided } from './AllHintsProvided';
 
 type Props = {
   wordToGuess: Word;
@@ -53,6 +54,8 @@ const PlayerNotGuessing: React.FC<Props> = ({
     setStatus('hintProvided');
   };
 
+  if(!roomId) return null
+
   switch (status) {
     case 'noHintProvided':
       return (
@@ -63,7 +66,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
 
     case 'allHintsProvided':
       return (
-        <AllHintsProvided hints={hints} setHints={setHints} players={players} />
+        <AllHintsProvided hints={hints} setHints={setHints} players={players} roomId={roomId} sendMessage={sendMessage}/>
       );
   }
 };
@@ -91,48 +94,5 @@ const AfterSendingHint: React.FC<{ hints: Hint[]; players: Player[] }> = ({
     </div>
   </div>
 );
-
-const AllHintsProvided: React.FC<{
-  hints: Hint[];
-  setHints: React.Dispatch<React.SetStateAction<Hint[]>>;
-  players: Player[];
-}> = ({ hints, setHints, players }) => {
-  const handleClick = (index: number) => () => {
-    setHints((prev) => {
-      const hints = [...prev];
-      hints[index] = { ...hints[index], isValid: !hints[index].isValid };
-      return hints;
-    });
-  };
-
-  const handleSend = () => {
-    // TODO: Implement send invalid hints.
-  };
-
-  return (
-    <div>
-      <h2>¡Ya están todos!</h2>
-      <p>Ahora toca descartar las pistas que consideréis idénticas</p>
-      <div>
-        <ul>
-          {hints.map(({ player, hint, isValid }, index) => {
-            const playerIndex = players.findIndex((p) => p === player);
-            return (
-              <li
-                className={getPlayerColor(playerIndex)}
-                onClick={handleClick(index)}
-              >
-                {player}: {hint} {isValid === false ? 'X' : ''}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <button type="button" onClick={handleSend}>
-        Continue
-      </button>
-    </div>
-  );
-};
 
 export { PlayerNotGuessing };
