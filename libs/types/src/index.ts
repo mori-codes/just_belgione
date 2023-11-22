@@ -72,6 +72,24 @@ type HintReceivedMessage = {
   };
 };
 
+type FinalHintsMessage = {
+  type: 'finalHints';
+  data: {
+    hints: Hint[];
+  };
+};
+
+type RoundResultMessage = {
+  type: 'roundResult';
+  data: {
+    guess: Word;
+    correct: boolean;
+    wordToGuess: Word;
+    roundIndex: number;
+    gamePoints: number;
+  };
+};
+
 // Client messages
 type StartGameMessage = {
   type: 'start';
@@ -88,6 +106,29 @@ type SendHintMessage = {
     hint: Word;
   };
 };
+
+type ConfirmHintsMessage = {
+  type: 'confirmHints';
+  data: {
+    roomId: Room['_id'];
+    hints: Hint[];
+  };
+};
+
+type GuessMessage = {
+  type: 'guess';
+  data: {
+    roomId: Room['_id'];
+    word: Word;
+  };
+};
+
+type StartRoundMessage = {
+  type: "newRound";
+  data: {
+    roomId: Room['_id'];
+  }
+}
 
 // Error messages
 type DuplicatedPlayerError = {
@@ -110,9 +151,16 @@ type ServerMessage = (
   | DuplicatedPlayerError
   | InvalidGameError
   | HintReceivedMessage
+  | FinalHintsMessage
+  | RoundResultMessage
 ) & { status: RoomStatus };
 
-type ClientMessage = StartGameMessage | SendHintMessage;
+type ClientMessage =
+  | StartGameMessage
+  | SendHintMessage
+  | ConfirmHintsMessage
+  | GuessMessage
+  | StartRoundMessage;
 
 // TYPE GUARDS
 const isCreateRoomBody = (obj: any): obj is CreateRoomBody =>
@@ -126,6 +174,7 @@ export type {
   RoomStatus,
   CreateRoomBody,
   CreateRoomResponse,
+  ConfirmHintsMessage,
   ServerMessage,
   ClientMessage,
   ActiveGames,
@@ -134,5 +183,9 @@ export type {
   Word,
   SendHintMessage,
   Hint,
+  GuessMessage,
+  RoundResultMessage,
+  FinalHintsMessage,
+  StartRoundMessage
 };
 export { isCreateRoomBody };
