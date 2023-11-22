@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { getPlayerColor } from '../../../helpers/getPlayerColor';
 import { SendHintScreen } from './SendHintScreen';
 import { AllHintsProvided } from './AllHintsProvided';
+import { WaitingForGuess } from './WaitingForGuess';
 
 type Props = {
   wordToGuess: Word;
@@ -26,18 +27,23 @@ const PlayerNotGuessing: React.FC<Props> = ({
   sendMessage,
 }) => {
   const [status, setStatus] = useState<
-    'noHintProvided' | 'hintProvided' | 'allHintsProvided'
+    'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
   >('noHintProvided');
   const [hints, setHints] = useState<Hint[]>([]);
   const [user] = useUser();
   const { id: roomId } = useParams();
 
   useEffect(() => {
-    if (lastJsonMessage?.type !== 'hintReceived') return;
+    if (lastJsonMessage?.type === 'hintReceived') {
+      setHints(lastJsonMessage.data.hints);
+      if (lastJsonMessage.data.hints.length === players.length - 1) {
+        setStatus('allHintsProvided');
+      }
+    }
 
-    setHints(lastJsonMessage.data.hints);
-    if (lastJsonMessage.data.hints.length === players.length - 1) {
-      setStatus('allHintsProvided');
+    if (lastJsonMessage?.type === 'finalHints') {
+      setHints(lastJsonMessage.data.validHints);
+      setStatus('waitingForGuess');
     }
   }, [lastJsonMessage, players]);
 
@@ -54,20 +60,35 @@ const PlayerNotGuessing: React.FC<Props> = ({
     setStatus('hintProvided');
   };
 
-  if(!roomId) return null
+  if (!roomId) return null;
 
   switch (status) {
     case 'noHintProvided':
       return (
-        <SendHintScreen wordToGuess={wordToGuess} onSend={handleSend} playerIndex={players.findIndex((p) => p === user)}/>
+        <SendHintScreen
+          wordToGuess={wordToGuess}
+          onSend={handleSend}
+          playerIndex={players.findIndex((p) => p === user)}
+        />
       );
     case 'hintProvided':
       return <AfterSendingHint hints={hints} players={players} />;
 
     case 'allHintsProvided':
       return (
-        <AllHintsProvided hints={hints} setHints={setHints} players={players} roomId={roomId} sendMessage={sendMessage}/>
+        <AllHintsProvided
+          hints={hints}
+          setHints={setHints}
+          players={players}
+          roomId={roomId}
+          sendMessage={sendMessage}
+        />
       );
+
+    case 'waitingForGuess':
+      if(lastJsonMessage.type !== "finalHints") return "Error";
+
+      return <WaitingForGuess hints={hints} playerGuessing={lastJsonMessage.data.playerGuessing} />;
   }
 };
 

@@ -38,7 +38,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   }, [enqueueError, lastJsonMessage, navigate]);
 
   return iAmGuessing ? (
-    <PlayerGuessing lastJsonMessage={lastJsonMessage} />
+    <PlayerGuessing lastJsonMessage={lastJsonMessage} sendMessage={sendMessage}/>
   ) : (
     <PlayerNotGuessing
       wordToGuess={state?.wordToGuess || ''}
