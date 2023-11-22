@@ -1,7 +1,7 @@
 import { Router } from 'oak';
 import { ActiveGames, ClientMessage } from '@just-belgione/types';
 import { joinUser } from './helpers/joinUser.ts';
-import { startGame } from './helpers/startGame.ts';
+import { startRound } from './helpers/startRound.ts';
 import { hintReceived } from './helpers/hintReceived.ts';
 import { createRoom } from './helpers/createRoom.ts';
 import { confirmHints } from './helpers/confirmHints.ts';
@@ -55,7 +55,8 @@ const setupWs = (router: Router) => {
       const message = JSON.parse(event.data) as ClientMessage;
       switch (message.type) {
         case 'start':
-          await startGame(activeGames, message.data.roomId);
+        case 'newRound':
+          await startRound(activeGames, message.data.roomId);
           break;
         case 'sendHint':
           // TODO: Make parameters an object

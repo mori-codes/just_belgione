@@ -10,6 +10,7 @@ import { PlayerGuessing } from './PlayerGuessing/PlayerGuessing';
 import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
+import RoundResult from './RoundResult/RoundResult';
 
 type Props = {
   players: Player[];
@@ -27,6 +28,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   useEffect(() => {
     if (!lastJsonMessage || lastJsonMessage?.type !== 'newRound') return;
     setState(lastJsonMessage.data.round);
+    console.log(lastJsonMessage.data.round.playerGuessing)
   }, [lastJsonMessage]);
 
   // Handle invalid room error
@@ -37,8 +39,27 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
     }
   }, [enqueueError, lastJsonMessage, navigate]);
 
+  if (lastJsonMessage.type === 'roundResult') {
+    const { guess, correct, gamePoints, roundIndex, wordToGuess } =
+      lastJsonMessage.data;
+    return (
+      <RoundResult
+        guess={guess}
+        correctWord={wordToGuess}
+        correct={correct}
+        roundIndex={roundIndex}
+        points={gamePoints}
+        playerGuessing={iAmGuessing}
+        sendMessage={sendMessage}
+      />
+    );
+  }
+
   return iAmGuessing ? (
-    <PlayerGuessing lastJsonMessage={lastJsonMessage} sendMessage={sendMessage}/>
+    <PlayerGuessing
+      lastJsonMessage={lastJsonMessage}
+      sendMessage={sendMessage}
+    />
   ) : (
     <PlayerNotGuessing
       wordToGuess={state?.wordToGuess || ''}

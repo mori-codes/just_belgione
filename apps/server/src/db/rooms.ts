@@ -133,7 +133,8 @@ const updateGameStatus = async (id: Room['_id'], status: RoomStatus) => {
 const createRound = async (
   id: Room['_id'],
   playerGuessing: Player,
-  wordToGuess: Word
+  wordToGuess: Word,
+  previousCurrentRound?: Round
 ) => {
   const BASE_URL = Deno.env.get('MONGO_BASE_URL');
   const API_KEY = Deno.env.get('MONGO_API_KEY');
@@ -165,6 +166,11 @@ const createRound = async (
         $set: {
           currentRound: newRound,
         },
+        $push: previousCurrentRound
+          ? {
+              rounds: previousCurrentRound,
+            }
+          : undefined,
       },
     }),
   });

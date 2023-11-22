@@ -27,12 +27,12 @@ const PlayerNotGuessing: React.FC<Props> = ({
   sendMessage,
 }) => {
   const [status, setStatus] = useState<
-    'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
+  'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
   >('noHintProvided');
   const [hints, setHints] = useState<Hint[]>([]);
   const [user] = useUser();
   const { id: roomId } = useParams();
-
+  
   useEffect(() => {
     if (lastJsonMessage?.type === 'hintReceived') {
       setHints(lastJsonMessage.data.hints);
