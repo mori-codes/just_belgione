@@ -12,7 +12,7 @@ const NotificationContainer = ({
   onNotificationDismiss,
 }: Props) => {
   return (
-    <div className="fixed w-full z-10 flex justify-center pt-8">
+    <div className="fixed w-full z-10 flex justify-center pt-8 pointer-events-none">
       <AnimatePresence>
         {currentNotification ? (
           <Notification
