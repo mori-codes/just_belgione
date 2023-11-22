@@ -230,6 +230,41 @@ const saveHints = async (id: Room['_id'], hints: Hint[]) => {
   });
 };
 
+const updateRoundsWithGuess = async (
+  id: Room['_id'],
+  wordGuessed: Word,
+  isGuessCorrect: boolean
+) => {
+  const BASE_URL = Deno.env.get('MONGO_BASE_URL');
+  const API_KEY = Deno.env.get('MONGO_API_KEY');
+  if (!BASE_URL || !API_KEY) throw new Error('Missing environment variables.');
+
+  await fetch(`${BASE_URL}/action/updateOne`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': API_KEY,
+    },
+    body: JSON.stringify({
+      database: 'justone',
+      dataSource: 'Cluster',
+      collection: 'rooms',
+      filter: {
+        _id: {
+          $oid: id,
+        },
+      },
+      update: {
+        $set: {
+          'currentRound.guess': wordGuessed,
+          'currentRound.correct': isGuessCorrect,
+        },
+      },
+    }),
+  });
+};
+
 export {
   getRoom,
   createRoom,
@@ -238,4 +273,5 @@ export {
   createRound,
   addHint,
   saveHints,
+  updateRoundsWithGuess,
 };

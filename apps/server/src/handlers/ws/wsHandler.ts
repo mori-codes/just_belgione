@@ -5,6 +5,7 @@ import { startGame } from './helpers/startGame.ts';
 import { hintReceived } from './helpers/hintReceived.ts';
 import { createRoom } from './helpers/createRoom.ts';
 import { confirmHints } from './helpers/confirmHints.ts';
+import { guess } from './helpers/guess.ts';
 
 const BASE_URL = '/ws';
 
@@ -50,15 +51,15 @@ const setupWs = (router: Router) => {
       });
     };
 
-    socket.onmessage = (event) => {
+    socket.onmessage = async (event) => {
       const message = JSON.parse(event.data) as ClientMessage;
       switch (message.type) {
         case 'start':
-          startGame(activeGames, message.data.roomId);
+          await startGame(activeGames, message.data.roomId);
           break;
         case 'sendHint':
           // TODO: Make parameters an object
-          hintReceived(
+          await hintReceived(
             activeGames,
             message.data.hint,
             message.data.player,
@@ -66,7 +67,14 @@ const setupWs = (router: Router) => {
           );
           break;
         case 'confirmHints':
-          confirmHints(activeGames, message.data.roomId, message.data.hints);
+          await confirmHints(
+            activeGames,
+            message.data.roomId,
+            message.data.hints
+          );
+          break;
+        case 'guess':
+          await guess(activeGames, message.data.roomId, message.data.word);
           break;
       }
     };
