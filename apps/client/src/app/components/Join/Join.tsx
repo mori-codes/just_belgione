@@ -21,7 +21,7 @@ const Join = () => {
         value={roomId}
         onChange={handleChange}
       />
-      <ButtonLink to={`/room/${roomId}`}>Join</ButtonLink>
+      <ButtonLink to={`/room/${roomId}`}>Unirse</ButtonLink>
       </div>
     </PageWrapper>
   );

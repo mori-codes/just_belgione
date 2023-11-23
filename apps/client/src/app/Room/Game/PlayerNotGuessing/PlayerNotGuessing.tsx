@@ -8,9 +8,8 @@ import {
 import { useEffect, useState } from 'react';
 import { useUser } from '../../../atoms/userAtom';
 import { useParams } from 'react-router-dom';
-import { getPlayerColor } from '../../../helpers/getPlayerColor';
 import { SendHintScreen } from './SendHintScreen';
-import { AllHintsProvided } from './AllHintsProvided';
+import { HintsPreview } from './HintsPreview';
 import { WaitingForGuess } from './WaitingForGuess';
 
 type Props = {
@@ -27,18 +26,15 @@ const PlayerNotGuessing: React.FC<Props> = ({
   sendMessage,
 }) => {
   const [status, setStatus] = useState<
-  'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
+    'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
   >('noHintProvided');
   const [hints, setHints] = useState<Hint[]>([]);
   const [user] = useUser();
   const { id: roomId } = useParams();
-  
+
   useEffect(() => {
     if (lastJsonMessage?.type === 'hintReceived') {
       setHints(lastJsonMessage.data.hints);
-      if (lastJsonMessage.data.hints.length === players.length - 1) {
-        setStatus('allHintsProvided');
-      }
     }
 
     if (lastJsonMessage?.type === 'finalHints') {
@@ -72,11 +68,19 @@ const PlayerNotGuessing: React.FC<Props> = ({
         />
       );
     case 'hintProvided':
-      return <AfterSendingHint hints={hints} players={players} />;
+      return (
+        <HintsPreview
+          hints={hints}
+          setHints={setHints}
+          players={players}
+          roomId={roomId}
+          sendMessage={sendMessage}
+        />
+      );
 
     case 'allHintsProvided':
       return (
-        <AllHintsProvided
+        <HintsPreview
           hints={hints}
           setHints={setHints}
           players={players}
@@ -86,34 +90,15 @@ const PlayerNotGuessing: React.FC<Props> = ({
       );
 
     case 'waitingForGuess':
-      if(lastJsonMessage.type !== "finalHints") return "Error";
+      if (lastJsonMessage.type !== 'finalHints') return 'Error';
 
-      return <WaitingForGuess hints={hints} playerGuessing={lastJsonMessage.data.playerGuessing} />;
+      return (
+        <WaitingForGuess
+          hints={hints}
+          playerGuessing={lastJsonMessage.data.playerGuessing}
+        />
+      );
   }
 };
-
-const AfterSendingHint: React.FC<{ hints: Hint[]; players: Player[] }> = ({
-  hints,
-  players,
-}) => (
-  <div>
-    <div>Esperando a todos</div>
-    <div>
-      <ul>
-        {hints.map(({ player, hint }) => {
-          const playerIndex = players.findIndex((p) => p === player);
-          return (
-            <li className={getPlayerColor(playerIndex)}>
-              {player}: {hint}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-    <div>
-      {hints.length}/{players.length}
-    </div>
-  </div>
-);
 
 export { PlayerNotGuessing };
