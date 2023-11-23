@@ -2,6 +2,7 @@ import {
   ClientMessage,
   Player,
   Round,
+  RoundResultMessage,
   ServerMessage,
 } from '@just-belgione/types';
 import { useEffect, useState } from 'react';
@@ -20,14 +21,20 @@ type Props = {
 
 const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   const [user] = useUser();
-  const [state, setState] = useState<Round>();
-  const iAmGuessing = state?.playerGuessing === user;
+  const [round, setRound] = useState<Round>();
+  const [roundResult, setRoundResult] = useState<RoundResultMessage['data']>();
+  const iAmGuessing = round?.playerGuessing === user;
   const navigate = useNavigate();
   const { enqueueError } = useNotificationContext();
 
   useEffect(() => {
-    if (!lastJsonMessage || lastJsonMessage?.type !== 'newRound') return;
-    setState(lastJsonMessage.data.round);
+    if (lastJsonMessage.type === 'newRound') {
+      setRound(lastJsonMessage.data.round);
+    }
+
+    if (lastJsonMessage.type === 'roundResult') {
+      setRoundResult(lastJsonMessage.data);
+    }
   }, [lastJsonMessage]);
 
   // Handle invalid room error
@@ -38,9 +45,8 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
     }
   }, [enqueueError, lastJsonMessage, navigate]);
 
-  if (lastJsonMessage.type === 'roundResult') {
-    const { guess, correct, gamePoints, roundIndex, wordToGuess } =
-      lastJsonMessage.data;
+  if (roundResult !== undefined) {
+    const { guess, correct, gamePoints, roundIndex, wordToGuess } = roundResult;
     return (
       <RoundResult
         guess={guess}
@@ -61,7 +67,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
     />
   ) : (
     <PlayerNotGuessing
-      wordToGuess={state?.wordToGuess || ''}
+      wordToGuess={round?.wordToGuess || ''}
       sendMessage={sendMessage}
       lastJsonMessage={lastJsonMessage}
       players={players}
