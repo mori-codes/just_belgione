@@ -12,6 +12,7 @@ import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
 import RoundResult from './RoundResult/RoundResult';
+import { useDifficulty } from '../../atoms/difficultyAtom';
 
 type Props = {
   players: Player[];
@@ -21,6 +22,7 @@ type Props = {
 
 const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   const [user] = useUser();
+  const [_, setDifficulty] = useDifficulty();
   const [round, setRound] = useState<Round>();
   const [roundResult, setRoundResult] = useState<RoundResultMessage['data']>();
   const iAmGuessing = round?.playerGuessing === user;
@@ -30,12 +32,14 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   useEffect(() => {
     if (lastJsonMessage.type === 'newRound') {
       setRound(lastJsonMessage.data.round);
+      setDifficulty(lastJsonMessage.data.difficulty);
+      setRoundResult(undefined);
     }
 
     if (lastJsonMessage.type === 'roundResult') {
       setRoundResult(lastJsonMessage.data);
     }
-  }, [lastJsonMessage]);
+  }, [lastJsonMessage, setDifficulty]);
 
   // Handle invalid room error
   useEffect(() => {

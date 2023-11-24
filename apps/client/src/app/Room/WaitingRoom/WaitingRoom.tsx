@@ -12,6 +12,8 @@ import { Button } from '../../components/common/Button';
 import { RoomCode } from './RoomCode';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
+import { DifficultySelector } from './DifficultySelector';
+import { useDifficulty } from '../../atoms/difficultyAtom';
 
 type Props = {
   roomId: Room['_id'];
@@ -29,6 +31,7 @@ const WaitingRoom: React.FC<Props> = ({
   setPlayers,
 }) => {
   const [user] = useUser();
+  const [difficulty, setDifficulty] = useDifficulty();
   const userCreatedTheRoom = players?.length && user === players[0];
   const navigate = useNavigate();
   const { enqueueError } = useNotificationContext();
@@ -42,7 +45,7 @@ const WaitingRoom: React.FC<Props> = ({
   // Handle duplicate player error
   useEffect(() => {
     if (lastJsonMessage && lastJsonMessage.type === 'duplicatePlayerError') {
-      enqueueError(lastJsonMessage.data.message)
+      enqueueError(lastJsonMessage.data.message);
       navigate('/');
     }
   }, [enqueueError, lastJsonMessage, navigate]);
@@ -52,6 +55,7 @@ const WaitingRoom: React.FC<Props> = ({
       type: 'start',
       data: {
         roomId,
+        difficulty,
       },
     });
   };
@@ -60,6 +64,12 @@ const WaitingRoom: React.FC<Props> = ({
     <PageWrapper center>
       <div className="flex flex-col grow p-8 py-16 gap-8 overflow-hidden">
         <RoomCode roomId={roomId} />
+        {userCreatedTheRoom && (
+          <DifficultySelector
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+          />
+        )}
         <PlayerDisplay players={players} />
         <div>
           {userCreatedTheRoom && (

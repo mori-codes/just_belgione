@@ -1,9 +1,13 @@
-import { ActiveGames, Room } from '@just-belgione/types';
+import { ActiveGames, Difficulty, Room } from '@just-belgione/types';
 import { notifyAll } from './notify.ts';
 import { updateGameStatus, createRound, getRoom } from '../../../db/rooms.ts';
 import { getRandomWord } from './words.ts';
 
-const startRound = async (activeGames: ActiveGames, roomId: Room['_id']) => {
+const startRound = async (
+  activeGames: ActiveGames,
+  roomId: Room['_id'],
+  difficulty: Difficulty
+): Promise<void> => {
   const room = await getRoom(roomId);
   if (!room) {
     throw new Error('Room not found');
@@ -18,7 +22,7 @@ const startRound = async (activeGames: ActiveGames, roomId: Room['_id']) => {
   const playerGuessing = Object.keys(activeGames[roomId].playerSockets)[
     playerGuessingIndex
   ];
-  const wordToGuess = getRandomWord();
+  const wordToGuess = getRandomWord(difficulty);
 
   // Update the database.
   if (status === 'WAITING') {
@@ -38,6 +42,7 @@ const startRound = async (activeGames: ActiveGames, roomId: Room['_id']) => {
         wordToGuess,
         hints: [],
       },
+      difficulty,
     },
   });
 };

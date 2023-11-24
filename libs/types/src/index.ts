@@ -12,6 +12,8 @@ type Hint = {
 
 type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
+type Difficulty = 'easy' | 'normal' | 'hard' | 'veryHard' | 'all' | 'm&p';
+
 type Round = {
   playerGuessing: Player;
   wordToGuess: Word;
@@ -62,6 +64,7 @@ type NewRoundMessage = {
   type: 'newRound';
   data: {
     round: Round;
+    difficulty: Difficulty;
   };
 };
 
@@ -72,7 +75,6 @@ type HintReceivedMessage = {
   };
 };
 
-// This is new.
 type FinalHintsMessage = {
   type: 'finalHints';
   data: {
@@ -81,7 +83,6 @@ type FinalHintsMessage = {
   };
 };
 
-// This is new.
 type RoundResultMessage = {
   type: 'roundResult';
   data: {
@@ -98,6 +99,7 @@ type StartGameMessage = {
   type: 'start';
   data: {
     roomId: string;
+    difficulty: Difficulty;
   };
 };
 
@@ -110,7 +112,6 @@ type SendHintMessage = {
   };
 };
 
-// This is new.
 type ConfirmHintsMessage = {
   type: 'confirmHints';
   data: {
@@ -119,7 +120,6 @@ type ConfirmHintsMessage = {
   };
 };
 
-// This is new.
 type GuessMessage = {
   type: 'guess';
   data: {
@@ -128,11 +128,11 @@ type GuessMessage = {
   };
 };
 
-// This is new.
 type StartRoundMessage = {
   type: 'newRound';
   data: {
     roomId: Room['_id'];
+    difficulty: Difficulty;
   };
 };
 
@@ -193,5 +193,6 @@ export type {
   RoundResultMessage,
   FinalHintsMessage,
   StartRoundMessage,
+  Difficulty,
 };
 export { isCreateRoomBody };

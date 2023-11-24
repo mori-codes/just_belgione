@@ -56,10 +56,13 @@ const setupWs = (router: Router) => {
       switch (message.type) {
         case 'start':
         case 'newRound':
-          await startRound(activeGames, message.data.roomId);
+          await startRound(
+            activeGames,
+            message.data.roomId,
+            message.data.difficulty
+          );
           break;
         case 'sendHint':
-          // TODO: Make parameters an object
           await hintReceived(
             activeGames,
             message.data.hint,

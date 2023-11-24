@@ -11,7 +11,7 @@ const normalizeWord = (word: Word): Word => {
 };
 
 const isGuessCorrect = (wordToGuess: Word, wordGuessed: Word): boolean => {
-  // TODO: So something smart to check that the words match.
+  // TODO: So something smart to check that the words match!
   // E.g.: SpaCy lemmatization.
   return normalizeWord(wordToGuess) === normalizeWord(wordGuessed);
 };

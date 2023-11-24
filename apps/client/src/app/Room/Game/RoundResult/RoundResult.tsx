@@ -1,6 +1,7 @@
 import { ClientMessage, StartRoundMessage } from '@just-belgione/types';
 import { Button } from '../../../components/common/Button';
 import { useParams } from 'react-router-dom';
+import { useDifficulty } from '../../../atoms/difficultyAtom';
 
 type Props = {
   guess: string;
@@ -20,6 +21,7 @@ const RoundResult = ({
   playerGuessing,
   sendMessage,
 }: Props) => {
+  const [difficulty] = useDifficulty();
   const { id: roomId } = useParams();
 
   const handleNextRound = () => {
@@ -29,6 +31,7 @@ const RoundResult = ({
       type: 'newRound',
       data: {
         roomId,
+        difficulty,
       },
     };
 
@@ -45,7 +48,9 @@ const RoundResult = ({
       <p className={`${correct ? 'bg-jo-green' : 'bg-jo-red'}`}>
         $FALTA NOMBRE$ ha respondido: {guess}
       </p>
-      {playerGuessing ? <Button onClick={handleNextRound}>Siguiente</Button> : null}
+      {playerGuessing ? (
+        <Button onClick={handleNextRound}>Siguiente</Button>
+      ) : null}
     </div>
   );
 };
