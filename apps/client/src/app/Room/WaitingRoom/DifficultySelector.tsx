@@ -2,14 +2,20 @@ import { Difficulty } from '@just-belgione/types';
 import React from 'react';
 
 // TODO: I didn't manage to "convert Difficulty to string",
-const difficultyTranslation: Map<Difficulty, string> = new Map([
-  ['easy', 'Fácil'],
-  ['normal', 'Normal'],
-  ['hard', 'Difícil'],
-  ['veryHard', 'Muy difícil'],
-  ['all', 'Todas las palabras'],
-  ['m&p', 'm&p'],
-]);
+type DifficultyOption = {
+  difficulty: Difficulty;
+  label: string;
+  color: string;
+};
+
+const difficulties: Array<DifficultyOption> = [
+  { difficulty: 'easy', label: '1', color: 'bg-jo-green' },
+  { difficulty: 'normal', label: '2', color: 'bg-jo-main' },
+  { difficulty: 'hard', label: '3', color: 'bg-jo-main' },
+  { difficulty: 'veryHard', label: '4', color: 'bg-jo-red' },
+  { difficulty: 'all', label: '5', color: 'bg-jo-red' },
+  { difficulty: 'm&p', label: '⭐', color: 'bg-jo-purple' },
+];
 
 type Props = {
   difficulty: Difficulty;
@@ -17,19 +23,23 @@ type Props = {
 };
 
 const DifficultySelector: React.FC<Props> = ({ difficulty, setDifficulty }) => {
-  const handleDifficultyChange: React.ChangeEventHandler<HTMLSelectElement> = ({
-    target: { value },
-  }) => {
-    setDifficulty(value as Difficulty);
-  };
+  const indexSelected = difficulties.findIndex(
+    (dif) => dif.difficulty === difficulty
+  );
+
   return (
-    <div>
-      <p>Elige la dificultad de la partida</p>
-      <select name="select" onChange={handleDifficultyChange}>
-        {[...difficultyTranslation].map(([dif, translation]) => (
-          <option value={dif}>{translation}</option>
-        ))}
-      </select>
+    <div className="w-full flex h-[50px] rounded-sm overflow-hidden text-white shadow-lg">
+      {difficulties.map(({ difficulty, label, color }, index) => (
+        <button
+          key={difficulty}
+          onClick={() => setDifficulty(difficulty)}
+          className={`${
+            index <= indexSelected ? color : 'bg-jo-black/25'
+          } flex items-center justify-center grow text-jo-sm transition-all`}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 };
