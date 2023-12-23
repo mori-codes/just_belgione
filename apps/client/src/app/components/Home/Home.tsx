@@ -1,6 +1,6 @@
 import { useUser } from '../../atoms/userAtom';
 import { useCreateRoom } from '../../resources/room/room.hooks';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PageWrapper } from '../common/PageWrapper';
 import { Input } from '../common/Input';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -13,6 +13,7 @@ import { ButtonLink } from '../common/ButtonLink';
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useUser();
   const { mutateAsync } = useCreateRoom();
@@ -43,7 +44,14 @@ const Home = () => {
                 className="flex flex-col gap-12 pb-8"
               >
                 <Button onClick={handleCreateRoom}>Crear sala</Button>
-                <ButtonLink to="/join">Entrar a sala</ButtonLink>
+                <ButtonLink
+                  to={{
+                    pathname: '/join',
+                    search: location.search,
+                  }}
+                >
+                  Entrar a sala
+                </ButtonLink>
               </motion.div>
             ) : null}
           </AnimatePresence>
