@@ -2,18 +2,28 @@ import {
   ClientMessage,
   GuessMessage,
   Hint,
+  Player,
   ServerMessage,
 } from '@just-belgione/types';
 import { PageWrapper } from '../../../components/common/PageWrapper';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { HintList } from '../../../components/common/HintList';
+import { BottomGradient } from '../../../components/common/BottomGradient';
+import { Input } from '../../../components/common/Input';
+import { ArrowRight } from '../../../components/icons/ArrowRight';
 
 type Props = {
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: ClientMessage) => void;
+  players: Player[];
 };
 
-const PlayerGuessing: React.FC<Props> = ({ lastJsonMessage, sendMessage }) => {
+const PlayerGuessing: React.FC<Props> = ({
+  lastJsonMessage,
+  sendMessage,
+  players,
+}) => {
   const [hints, setHints] = useState<Hint[]>();
   const [guess, setGuess] = useState('');
   const { id: roomId } = useParams();
@@ -52,22 +62,31 @@ const PlayerGuessing: React.FC<Props> = ({ lastJsonMessage, sendMessage }) => {
   }
 
   return (
-    <div>
-      Adivina maxo:{' '}
-      <input
-        type="text"
-        value={guess}
-        onChange={(event) => setGuess(event.target.value)}
-      />
-      <button onClick={sendGuess}>Enviar Respuesta</button>
-      <ul>
-        {hints.map((hint) => (
-          <li key={hint.player}>
-            {hint.player}: {hint.hint}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <PageWrapper>
+        <div className="flex flex-col w-full px-4 pb-[150px] pt-[100px]">
+          <p className="text-jo-md text-center mb-8">Tus pistas</p>
+          <HintList hints={hints} players={players} />
+        </div>
+      </PageWrapper>
+      <BottomGradient color="main">
+          <div className="flex items-center px-4 gap-4 max-w-[600px] mx-auto">
+            <div className="grow">
+              <Input
+                placeholder="Tu respuesta"
+                value={guess}
+                onChange={(ev) => setGuess(ev.target.value)}
+              />
+            </div>
+            <button
+              className="w-[50px] h-[50px] rounded-sm bg-jo-main text-white shadow-lg flex justify-center items-center"
+              onClick={sendGuess}
+            >
+              <ArrowRight />
+            </button>
+        </div>
+      </BottomGradient>
+    </>
   );
 };
 

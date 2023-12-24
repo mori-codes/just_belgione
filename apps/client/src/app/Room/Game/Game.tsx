@@ -22,7 +22,7 @@ type Props = {
 
 const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
   const [user] = useUser();
-  const [_, setDifficulty] = useDifficulty();
+  const [, setDifficulty] = useDifficulty();
   const [round, setRound] = useState<Round>();
   const [roundResult, setRoundResult] = useState<RoundResultMessage['data']>();
   const iAmGuessing = round?.playerGuessing === user;
@@ -68,6 +68,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
     <PlayerGuessing
       lastJsonMessage={lastJsonMessage}
       sendMessage={sendMessage}
+      players={players}
     />
   ) : (
     <PlayerNotGuessing

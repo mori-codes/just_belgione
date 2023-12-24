@@ -96,6 +96,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
         <WaitingForGuess
           hints={hints}
           playerGuessing={lastJsonMessage.data.playerGuessing}
+          players={players}	
         />
       );
   }
