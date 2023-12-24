@@ -1,7 +1,8 @@
-import { ClientMessage, StartRoundMessage } from '@just-belgione/types';
+import { ClientMessage, Player, StartRoundMessage } from '@just-belgione/types';
 import { Button } from '../../../components/common/Button';
 import { useParams } from 'react-router-dom';
 import { useDifficulty } from '../../../atoms/difficultyAtom';
+import { PageWrapper } from '../../../components/common/PageWrapper';
 
 type Props = {
   guess: string;
@@ -9,7 +10,8 @@ type Props = {
   correct: boolean;
   roundIndex: number;
   points: number;
-  playerGuessing: boolean;
+  iAmGuessing: boolean;
+  playerGuessing: Player;
   sendMessage: (jsonMessage: ClientMessage) => void;
 };
 const RoundResult = ({
@@ -18,8 +20,9 @@ const RoundResult = ({
   correct,
   roundIndex,
   points,
-  playerGuessing,
+  iAmGuessing,
   sendMessage,
+  playerGuessing
 }: Props) => {
   const [difficulty] = useDifficulty();
   const { id: roomId } = useParams();
@@ -39,19 +42,35 @@ const RoundResult = ({
   };
 
   return (
-    <div>
-      <p>
-        Puntos: {points} {correct ? '+1' : '+0'}
-      </p>
-      <p>Ronda: {roundIndex}</p>
-      <p>La palabra era: {correctWord}</p>
-      <p className={`${correct ? 'bg-jo-green' : 'bg-jo-red'}`}>
-        $FALTA NOMBRE$ ha respondido: {guess}
-      </p>
-      {playerGuessing ? (
-        <Button onClick={handleNextRound}>Siguiente</Button>
-      ) : null}
-    </div>
+    <PageWrapper>
+      <div className="min-h-[100dvh] w-full px-4 flex flex-col justify-center">
+        <div className="bg-white rounded-sm w-full shadow-lg mb-8 py-6 px-4 flex justify-between text-jo-sm">
+          <p>
+            Puntos: {points}{' '}
+            <span className={correct ? 'text-jo-green' : 'text-jo-red'}>
+              {correct ? '+1' : '+0'}
+            </span>
+          </p>
+          <p>Ronda {roundIndex + 1
+          }</p>
+        </div>
+        <div className="w-full text-center py-8 rounded-sm bg-white mb-4 shadow-lg">
+          <p className="text-jo-sm pb-4">La palabra era:</p>
+          <p className="text-jo-lg uppercase">{correctWord}</p>
+        </div>
+        <div
+          className={`w-full text-center py-8 mb-8 text-white rounded-sm shadow-lg ${
+            correct ? 'bg-jo-green' : 'bg-jo-red'
+          }`}
+        >
+          <p className="text-jo-sm pb-4">{playerGuessing} ha respondido:</p>
+          <p className="text-jo-lg uppercase">{guess}</p>
+        </div>
+        {iAmGuessing ? (
+          <Button onClick={handleNextRound}>Siguiente</Button>
+        ) : null}
+      </div>
+    </PageWrapper>
   );
 };
 export default RoundResult;

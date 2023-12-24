@@ -65,16 +65,16 @@ const WaitingRoom: React.FC<Props> = ({
       <div className="flex flex-col grow p-8 py-16 gap-8 overflow-hidden">
         <RoomCode roomId={roomId} />
         <PlayerDisplay players={players} />
-        {userCreatedTheRoom && (
+        {userCreatedTheRoom ? (
           <DifficultySelector
             difficulty={difficulty}
             setDifficulty={setDifficulty}
           />
-        )}
+        ) : null}
         <div>
-          {userCreatedTheRoom && (
+          {userCreatedTheRoom ? (
             <Button onClick={handleStartGame}>Empezar</Button>
-          )}
+          ) : null}
         </div>
       </div>
     </PageWrapper>

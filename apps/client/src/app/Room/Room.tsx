@@ -7,6 +7,7 @@ import { Game } from './Game/Game';
 import { GameOver } from './GameOver/GameOver';
 import { useState } from 'react';
 import { useUser } from '../atoms/userAtom';
+import { PageWrapper } from '../components/common/PageWrapper';
 
 const BASE_URL = process.env.NX_REACT_APP_WS_URL;
 const PATH = '/ws';
@@ -37,7 +38,13 @@ const Room = () => {
   const status = lastJsonMessage?.status || room?.status;
 
   if (isLoading || !status || !id) {
-    return <>Loading...</>;
+    return (
+      <PageWrapper>
+        <div className="h-[100dvh] flex justify-center items-center text-jo-md w-full">
+          Cargando...
+        </div>
+      </PageWrapper>
+    );
   }
 
   if (status === 'WAITING') {

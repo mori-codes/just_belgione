@@ -58,8 +58,9 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
         correct={correct}
         roundIndex={roundIndex}
         points={gamePoints}
-        playerGuessing={iAmGuessing}
+        iAmGuessing={iAmGuessing}
         sendMessage={sendMessage}
+        playerGuessing={round?.playerGuessing || ''}
       />
     );
   }
