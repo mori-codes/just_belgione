@@ -30,7 +30,7 @@ const Room = () => {
   const { sendJsonMessage, lastJsonMessage } = useWebSocket<ServerMessage>(
     socketUrl,
     {
-      shouldReconnect: () => true,
+      shouldReconnect: (closeEvent) => closeEvent.code !== 3000,
       reconnectInterval: 1000,
     }
   );
@@ -84,7 +84,7 @@ const Room = () => {
   }
 
   if (status === 'FINISHED') {
-    return <GameOver />;
+    return <GameOver lastJsonMessage={lastJsonMessage} room={room} />;
   }
 
   return <div>Room</div>;

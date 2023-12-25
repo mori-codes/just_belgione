@@ -39,7 +39,7 @@ type CreateRoomResponse = { id: Room['_id'] };
 type ActiveRoom = {
   status: RoomStatus;
   playerSockets: Record<string, WebSocket>;
-  lastMessage?: ServerMessage
+  lastMessage?: ServerMessage;
 };
 type ActiveGames = Record<string, ActiveRoom>;
 
@@ -92,6 +92,13 @@ type RoundResultMessage = {
     wordToGuess: Word;
     roundIndex: number;
     gamePoints: number;
+  };
+};
+
+type GameOverMessage = {
+  type: 'gameOver';
+  data: {
+    room: Room;
   };
 };
 
@@ -160,6 +167,7 @@ type ServerMessage = (
   | HintReceivedMessage
   | FinalHintsMessage
   | RoundResultMessage
+  | GameOverMessage
 ) & { status: RoomStatus };
 
 type ClientMessage =

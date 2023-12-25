@@ -23,6 +23,7 @@ module.exports = {
         'jo-black': '#121212',
         'jo-purple': '#CF5CCB',
         'jo-light-black': 'rgba(18, 18, 18, 0.75)',
+        'jo-grey': '#D9D9D9',
       },
       fontSize: {
         'jo-sm': '20px',
