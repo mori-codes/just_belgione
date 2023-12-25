@@ -2,6 +2,7 @@ import {
   ClientMessage,
   Hint,
   Player,
+  Room,
   ServerMessage,
   Word,
 } from '@just-belgione/types';
@@ -17,6 +18,21 @@ type Props = {
   players: Player[];
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: ClientMessage) => void;
+  room: Room;
+};
+
+const getDefaultStatus = (
+  currentHints: Hint[],
+  user: Player,
+  allPlayers: Player[]
+) => {
+  // If number of hints is equal to number of player, state is ready to send
+  if (currentHints.length === allPlayers.length - 1) return 'allHintsProvided';
+
+  // Otherwise, check if there is a hint provided by the current player
+  return currentHints.find((hint) => hint.player === user)
+    ? 'hintProvided'
+    : 'noHintProvided';
 };
 
 const PlayerNotGuessing: React.FC<Props> = ({
@@ -24,12 +40,13 @@ const PlayerNotGuessing: React.FC<Props> = ({
   players,
   lastJsonMessage,
   sendMessage,
+  room,
 }) => {
+  const [hints, setHints] = useState<Hint[]>(room.currentRound?.hints || []);
+  const [user] = useUser();
   const [status, setStatus] = useState<
     'noHintProvided' | 'hintProvided' | 'allHintsProvided' | 'waitingForGuess'
-  >('noHintProvided');
-  const [hints, setHints] = useState<Hint[]>([]);
-  const [user] = useUser();
+  >(getDefaultStatus(room.currentRound?.hints || [], user, players));
   const { id: roomId } = useParams();
 
   useEffect(() => {
@@ -96,7 +113,7 @@ const PlayerNotGuessing: React.FC<Props> = ({
         <WaitingForGuess
           hints={hints}
           playerGuessing={lastJsonMessage.data.playerGuessing}
-          players={players}	
+          players={players}
         />
       );
   }

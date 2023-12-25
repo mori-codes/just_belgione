@@ -28,4 +28,4 @@ const useGetRoom = (id?: Room['_id']) =>
     enabled: id !== undefined,
   });
 
-export { useCreateRoom, useGetRoom };
+export { useCreateRoom, useGetRoom, QUERY_KEY};

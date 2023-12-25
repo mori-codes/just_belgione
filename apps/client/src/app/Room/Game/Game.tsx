@@ -1,6 +1,7 @@
 import {
   ClientMessage,
   Player,
+  Room,
   Round,
   RoundResultMessage,
   ServerMessage,
@@ -13,25 +14,44 @@ import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
 import RoundResult from './RoundResult/RoundResult';
 import { useDifficulty } from '../../atoms/difficultyAtom';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY } from '../../resources/room/room.hooks';
 
 type Props = {
   players: Player[];
   lastJsonMessage: ServerMessage;
   sendMessage: (jsonMessage: ClientMessage) => void;
+  room: Room;
 };
 
-const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
+const Game: React.FC<Props> = ({
+  players,
+  lastJsonMessage,
+  sendMessage,
+  room,
+}) => {
   const [user] = useUser();
   const [, setDifficulty] = useDifficulty();
-  const [round, setRound] = useState<Round>();
+  const [round, setRound] = useState<Round | undefined>(room.currentRound);
   const [roundResult, setRoundResult] = useState<RoundResultMessage['data']>();
   const iAmGuessing = round?.playerGuessing === user;
   const navigate = useNavigate();
   const { enqueueError } = useNotificationContext();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (lastJsonMessage.type === 'newRound') {
       setRound(lastJsonMessage.data.round);
+      queryClient.setQueryData([QUERY_KEY, room._id], (oldData) => {
+        if (!oldData) {
+          return oldData;
+        }
+
+        return {
+          ...oldData,
+          currentRound: lastJsonMessage.data.round,
+        };
+      });
       setDifficulty(lastJsonMessage.data.difficulty);
       setRoundResult(undefined);
     }
@@ -39,7 +59,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
     if (lastJsonMessage.type === 'roundResult') {
       setRoundResult(lastJsonMessage.data);
     }
-  }, [lastJsonMessage, setDifficulty]);
+  }, [lastJsonMessage, queryClient, room._id, setDifficulty]);
 
   // Handle invalid room error
   useEffect(() => {
@@ -77,6 +97,7 @@ const Game: React.FC<Props> = ({ players, lastJsonMessage, sendMessage }) => {
       sendMessage={sendMessage}
       lastJsonMessage={lastJsonMessage}
       players={players}
+      room={room}
     />
   );
 };

@@ -5,7 +5,7 @@ import { Player, ServerMessage } from '@just-belgione/types';
 import { WaitingRoom } from './WaitingRoom/WaitingRoom';
 import { Game } from './Game/Game';
 import { GameOver } from './GameOver/GameOver';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '../atoms/userAtom';
 import { PageWrapper } from '../components/common/PageWrapper';
 
@@ -37,7 +37,20 @@ const Room = () => {
 
   const status = lastJsonMessage?.status || room?.status;
 
-  if (isLoading || !status || !id) {
+  useEffect(() => {
+    // Set initial state for players if another message is unable to
+    if (room) {
+      setPlayers((prev) => (prev.length === 0 ? room.players : prev));
+    }
+  }, [room]);
+
+  if (
+    isLoading ||
+    !room ||
+    !status ||
+    !id ||
+    (status === 'PLAYING' && lastJsonMessage === null)
+  ) {
     return (
       <PageWrapper>
         <div className="h-[100dvh] flex justify-center items-center text-jo-md w-full">
@@ -65,6 +78,7 @@ const Room = () => {
         players={players}
         lastJsonMessage={lastJsonMessage}
         sendMessage={sendJsonMessage}
+        room={room}
       />
     );
   }

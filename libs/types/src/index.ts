@@ -39,6 +39,7 @@ type CreateRoomResponse = { id: Room['_id'] };
 type ActiveRoom = {
   status: RoomStatus;
   playerSockets: Record<string, WebSocket>;
+  lastMessage?: ServerMessage
 };
 type ActiveGames = Record<string, ActiveRoom>;
 

@@ -10,7 +10,8 @@ const notifyPlayer = (socket: WebSocket, message: ServerMessage) => {
 const notifyAll = (
   activeGames: ActiveGames,
   roomId: string,
-  message: ServerMessage
+  message: ServerMessage,
+  shouldUpdateLastMessage = true
 ) => {
   if (!activeGames[roomId]) return;
   const sockets = Object.values(
@@ -19,6 +20,9 @@ const notifyAll = (
   sockets.forEach((socket) => {
     notifyPlayer(socket, message);
   });
+  if (shouldUpdateLastMessage) {
+    activeGames[roomId].lastMessage = message;
+  }
 };
 
 export { notifyPlayer, notifyAll };

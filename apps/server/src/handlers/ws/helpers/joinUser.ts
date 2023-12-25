@@ -18,9 +18,9 @@ const joinUser = async ({
   // At this point, createGame should have been called
   // If that's not the case, close the socket in hopes
   // That the next time we select the correct machine
-  if(!activeGame){
-    socket.close()
-    return
+  if (!activeGame) {
+    socket.close();
+    return;
   }
 
   const { status: gameStatus } = activeGame;
@@ -37,8 +37,7 @@ const joinUser = async ({
       notifyPlayer(socket, {
         type: 'duplicatePlayerError',
         data: {
-          message:
-            'Ya hay un jugador con tu nombre en la sala',
+          message: 'Ya hay un jugador con tu nombre en la sala',
         },
         status: 'WAITING',
       });
@@ -62,6 +61,12 @@ const joinUser = async ({
   // Add or update the new user to the activeGames mapping
   activeGame.playerSockets[player] = socket;
 
+  // If there is a player reconnecting, just resend the last message to him
+  if (existingPlayer && activeGame.lastMessage) {
+    notifyPlayer(socket, activeGame.lastMessage);
+    return;
+  }
+
   // Update the database. (if player is not already there)
   if (!existingPlayer) {
     await addPlayer(roomId, player);
@@ -73,13 +78,18 @@ const joinUser = async ({
   }
 
   // Notify all the players.
-  notifyAll(activeGames, roomId, {
-    type: 'playerJoined',
-    data: {
-      players: room.players,
+  notifyAll(
+    activeGames,
+    roomId,
+    {
+      type: 'playerJoined',
+      data: {
+        players: room.players,
+      },
+      status: room.status,
     },
-    status: room.status,
-  });
+    false
+  );
 };
 
 export { joinUser };

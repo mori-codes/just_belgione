@@ -84,7 +84,7 @@ const setupWs = (router: Router) => {
     };
     socket.onclose = () => {
       // TODO: If all the users in the game have their connection closed,
-      // errase the game from the mapping.
+      // erase the game from the mapping.
     };
   });
 };
