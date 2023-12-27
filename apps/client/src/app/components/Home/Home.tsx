@@ -29,7 +29,7 @@ const Home = () => {
         <img src="/logoimage.png" alt="Solo una" />
         <div className="flex flex-col gap-12 pt-8">
           <Input
-            label="Introduce tu nombre"
+            label="🚈 Introduce tu nombre"
             value={user}
             onChange={(e) => setUser(e.target.value)}
           />
