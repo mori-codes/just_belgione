@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Input = ({ value, onChange, label, placeholder, playerIndex }: Props) => {
-  const playerOutlineClassname = `after:absolute after:left-1 after:top-1 after:right-1 after:bottom-1 after:rounded-sm after:border-${getPlayerColor(
+  const playerOutlineClassname = `after:absolute after:pointer-events-none after:left-1 after:top-1 after:right-1 after:bottom-1 after:rounded-sm after:border-${getPlayerColor(
     playerIndex ?? 0
   )} after:border-2`;
 
