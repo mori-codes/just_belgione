@@ -87,7 +87,7 @@ const HintsPreview = ({
       ) : (
         <BottomGradient color="black">
           <div className="px-4">
-            <Button bgColor="bg-jo-black" onClick={handleSend}>
+            <Button bgColor="bg-jo-black" onClick={() => {}}>
               <div className="flex items-center justify-center gap-4">
                 {hints.length} / {players.length - 1} <Person />
               </div>
