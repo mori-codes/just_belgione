@@ -81,6 +81,8 @@ const Game: React.FC<Props> = ({
         iAmGuessing={iAmGuessing}
         sendMessage={sendMessage}
         playerGuessing={round?.playerGuessing || ''}
+        nextPlayer={players[(roundIndex + 1) % players.length]}
+        isFinalRound={roundIndex === (players.length * 2) - 1}
       />
     );
   }
