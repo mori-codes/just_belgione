@@ -41,7 +41,7 @@ const startRound = async (
     }
     delete activeGames[roomId];
 
-    return
+    return;
   }
 
   const isFirstRound = currentRound === undefined;
@@ -49,9 +49,7 @@ const startRound = async (
     ? 0 // The player who created the room will be the first one guessing
     : (rounds.length + 1) % players.length;
 
-  const playerGuessing = Object.keys(activeGames[roomId].playerSockets)[
-    playerGuessingIndex
-  ];
+  const playerGuessing = players[playerGuessingIndex];
   const wordToGuess = getRandomWord(difficulty);
 
   // Update the database.

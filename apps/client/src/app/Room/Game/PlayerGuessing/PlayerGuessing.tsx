@@ -66,24 +66,24 @@ const PlayerGuessing: React.FC<Props> = ({
       <PageWrapper>
         <div className="flex flex-col w-full px-4 pb-[150px] pt-[100px]">
           <p className="text-jo-md text-center mb-8">Tus pistas</p>
-          <HintList hints={hints} players={players} />
+          <HintList hints={hints} players={players} showPlaceholder />
         </div>
       </PageWrapper>
       <BottomGradient color="main">
-          <div className="flex items-center px-4 gap-4 max-w-[600px] mx-auto">
-            <div className="grow">
-              <Input
-                placeholder="Tu respuesta"
-                value={guess}
-                onChange={(ev) => setGuess(ev.target.value)}
-              />
-            </div>
-            <button
-              className="w-[50px] h-[50px] rounded-sm bg-jo-main text-white shadow-lg flex justify-center items-center"
-              onClick={sendGuess}
-            >
-              <ArrowRight />
-            </button>
+        <div className="flex items-center px-4 gap-4 max-w-[600px] mx-auto">
+          <div className="grow">
+            <Input
+              placeholder="Tu respuesta"
+              value={guess}
+              onChange={(ev) => setGuess(ev.target.value)}
+            />
+          </div>
+          <button
+            className="w-[50px] h-[50px] rounded-sm bg-jo-main text-white shadow-lg flex justify-center items-center"
+            onClick={sendGuess}
+          >
+            <ArrowRight />
+          </button>
         </div>
       </BottomGradient>
     </>

@@ -15,7 +15,7 @@ const WaitingForGuess = ({ playerGuessing, hints, players }: Props) => {
       <PageWrapper>
         <div className="flex flex-col w-full px-4 pb-[150px] pt-[100px]">
           <p className="text-jo-md text-center mb-8">Tus pistas</p>
-          <HintList hints={hints} players={players} />
+          <HintList hints={hints} players={players} showPlaceholder />
         </div>
       </PageWrapper>
       <BottomGradient color="main">
