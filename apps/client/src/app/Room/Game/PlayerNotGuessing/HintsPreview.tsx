@@ -4,6 +4,7 @@ import {
   Hint,
   Player,
   Room,
+  UpdateHintsMessage,
 } from '@just-belgione/types';
 import { PageWrapper } from '../../../components/common/PageWrapper';
 import { HintList } from '../../../components/common/HintList';
@@ -28,15 +29,17 @@ const HintsPreview = ({
   const areAllPlayersReady = hints.length === players.length - 1;
 
   const handleClick = (hint: Hint, valid: boolean) => {
-    setHints((prev) => {
-      const hints = [...prev];
-      const index = hints.findIndex(
-        (h) => h.hint === hint.hint && h.player === hint.player
-      );
+    const message: UpdateHintsMessage = {
+      type: 'updateHints',
+      data: {
+        roomId,
+        hints: hints.map((h) =>
+          h.player === hint.player ? { ...h, isValid: valid } : h
+        ),
+      },
+    };
 
-      hints[index] = { ...hints[index], isValid: valid };
-      return hints;
-    });
+    sendMessage(message);
   };
 
   const handleSend = () => {

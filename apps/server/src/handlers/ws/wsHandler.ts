@@ -6,6 +6,7 @@ import { hintReceived } from './helpers/hintReceived.ts';
 import { createRoom } from './helpers/createRoom.ts';
 import { confirmHints } from './helpers/confirmHints.ts';
 import { guess } from './helpers/guess.ts';
+import { updateHints } from './helpers/updateHints.ts';
 
 const BASE_URL = '/ws';
 
@@ -68,6 +69,13 @@ const setupWs = (router: Router) => {
             message.data.hint,
             message.data.player,
             message.data.roomId
+          );
+          break;
+        case 'updateHints':
+          await updateHints(
+            activeGames,
+            message.data.roomId,
+            message.data.hints
           );
           break;
         case 'confirmHints':

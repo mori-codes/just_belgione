@@ -120,6 +120,14 @@ type SendHintMessage = {
   };
 };
 
+type UpdateHintsMessage = {
+  type: 'updateHints';
+  data: {
+    roomId: Room['_id'];
+    hints: Hint[];
+  };
+};
+
 type ConfirmHintsMessage = {
   type: 'confirmHints';
   data: {
@@ -175,7 +183,8 @@ type ClientMessage =
   | SendHintMessage
   | ConfirmHintsMessage
   | GuessMessage
-  | StartRoundMessage;
+  | StartRoundMessage
+  | UpdateHintsMessage;
 
 // TYPE GUARDS
 const isCreateRoomBody = (obj: any): obj is CreateRoomBody =>
@@ -189,6 +198,7 @@ export type {
   RoomStatus,
   CreateRoomBody,
   CreateRoomResponse,
+  UpdateHintsMessage,
   ConfirmHintsMessage,
   ServerMessage,
   ClientMessage,

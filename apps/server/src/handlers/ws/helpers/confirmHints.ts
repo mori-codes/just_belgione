@@ -30,4 +30,4 @@ const confirmHints = async (
   });
 };
 
-export { confirmHints };
+export { validateHints, confirmHints };
