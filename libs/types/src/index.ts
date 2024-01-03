@@ -13,6 +13,7 @@ type Hint = {
 type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 type Difficulty = 'easy' | 'normal' | 'hard' | 'veryHard' | 'all' | 'm&p';
+type AvailableLanguages = 'spanish' | 'english';
 
 type Round = {
   playerGuessing: Player;
@@ -31,9 +32,11 @@ type Room = {
   status: RoomStatus;
   rounds: Round[];
   currentRound?: Round;
+  difficulty?: Difficulty;
+  language: AvailableLanguages;
 };
 
-type CreateRoomBody = Pick<Room, 'players'>;
+type CreateRoomBody = Pick<Room, 'players' | 'language'>;
 type CreateRoomResponse = { id: Room['_id'] };
 
 type ActiveRoom = {
@@ -65,7 +68,6 @@ type NewRoundMessage = {
   type: 'newRound';
   data: {
     round: Round;
-    difficulty: Difficulty;
   };
 };
 
@@ -148,7 +150,7 @@ type StartRoundMessage = {
   type: 'newRound';
   data: {
     roomId: Room['_id'];
-    difficulty: Difficulty;
+    difficulty?: Difficulty;
   };
 };
 
@@ -188,7 +190,7 @@ type ClientMessage =
 
 // TYPE GUARDS
 const isCreateRoomBody = (obj: any): obj is CreateRoomBody =>
-  !obj?.players !== undefined;
+  obj?.players !== undefined && obj?.language !== undefined;
 
 export type {
   MongoFindOneResponse,
@@ -213,5 +215,6 @@ export type {
   FinalHintsMessage,
   StartRoundMessage,
   Difficulty,
+  AvailableLanguages,
 };
 export { isCreateRoomBody };

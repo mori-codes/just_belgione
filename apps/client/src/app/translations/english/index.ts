@@ -1,0 +1,45 @@
+import { Translations } from '../base';
+
+const english: Translations = {
+  NAME_INPUT: 'Choose a name',
+  CREATE_ROOM_BUTTON: 'Create room',
+  JOIN_ROOM_BUTTON: 'Join room',
+  JOIN_BUTTON: 'Join',
+  ROOM_CODE: 'Room code',
+  WAITING_PLAYERS: 'Waiting players...',
+  START_ROOM_BUTTON: 'Start',
+  YOUR_TURN: "It's your turn!",
+  YOUR_TURN_DESCRIPTION: 'Your friends are figuring out the best hint',
+  YOUR_HINTS: 'Your hints',
+  YOUR_GUESS_PLACEHOLDER: 'Your guess',
+  POINTS: 'Points',
+  ROUND: 'Round',
+  THE_WORD_WAS: 'The word was:',
+  USER_GUESSED: 'has guessed:',
+  NEXT_ROUND_BUTTON: 'Next round',
+  LAST_ROUND_BUTTON: 'Finish',
+  WAITING_FOR_EVERYONE: 'Waiting for everyone',
+  EVERYONE_IS_READY: 'Everyone is ready!',
+  EVERYONE_IS_READY_DESCRIPTION: 'Now is time to discard invalid hints',
+  THE_WORD_IS: 'The word is:',
+  HINT_INPUT_PLACEHOLDER: 'Write here your hint',
+  SEND_HINT_BUTTON: 'Send',
+  WAITING_BUTTON: 'Waiting',
+  CONFIRM_BUTTON: 'Confirm',
+  IS_THINKING: 'is thinking...',
+  NEXT_TURN: 'Next one is:',
+  RESULT: 'Game result',
+  WORDS: 'words',
+  PERCENTAGE_DESCRIPTION: 'not bad',
+  END_BUTTON: 'End',
+  COMING_SOON: 'Coming soon',
+  COMING_SOON_DESCRIPTION: 'Game statistics',
+  LOADING: 'Loading...',
+  INVITE_MESSAGE_TITLE: 'Game request from',
+  INVITE_MESSAGE_DESCRIPTION:
+    'You were invited to a Solo Una match! Click on the following link to join',
+  NO_HINTS_PLACEHOLDER:
+    'Looks like you have no hints. Good luck!',
+};
+
+export { english };

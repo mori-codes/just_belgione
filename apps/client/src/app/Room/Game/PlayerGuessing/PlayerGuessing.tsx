@@ -12,6 +12,7 @@ import { HintList } from '../../../components/common/HintList';
 import { BottomGradient } from '../../../components/common/BottomGradient';
 import { Input } from '../../../components/common/Input';
 import { ArrowRight } from '../../../components/icons/ArrowRight';
+import { useLocalization } from '../../../atoms/localizationAtom';
 
 type Props = {
   lastJsonMessage: ServerMessage;
@@ -27,6 +28,7 @@ const PlayerGuessing: React.FC<Props> = ({
   const [hints, setHints] = useState<Hint[]>();
   const [guess, setGuess] = useState('');
   const { id: roomId } = useParams();
+  const { stringTable } = useLocalization();
 
   useEffect(() => {
     if (lastJsonMessage.type !== 'finalHints') return;
@@ -52,10 +54,8 @@ const PlayerGuessing: React.FC<Props> = ({
     return (
       <PageWrapper variant="dark" center>
         <div className="flex min-h-[100dvh] justify-center text-white flex-col text-center gap-4 drop-shadow-lg px-4">
-          <h2 className="text-jo-lg">¡Es tu turno!</h2>
-          <p className="text-jo-md">
-            Tus compañeros están pensando cuál es la mejor pista
-          </p>
+          <h2 className="text-jo-lg">{stringTable.YOUR_TURN}</h2>
+          <p className="text-jo-md">{stringTable.YOUR_TURN_DESCRIPTION}</p>
         </div>
       </PageWrapper>
     );
@@ -65,7 +65,9 @@ const PlayerGuessing: React.FC<Props> = ({
     <>
       <PageWrapper>
         <div className="flex flex-col w-full px-4 pb-[150px] pt-[100px]">
-          <p className="text-jo-md text-center mb-8">Tus pistas</p>
+          <p className="text-jo-md text-center mb-8">
+            {stringTable.YOUR_HINTS}
+          </p>
           <HintList hints={hints} players={players} showPlaceholder />
         </div>
       </PageWrapper>
@@ -73,7 +75,7 @@ const PlayerGuessing: React.FC<Props> = ({
         <div className="flex items-center px-4 gap-4 max-w-[600px] mx-auto">
           <div className="grow">
             <Input
-              placeholder="Tu respuesta"
+              placeholder={stringTable.YOUR_GUESS_PLACEHOLDER}
               value={guess}
               onChange={(ev) => setGuess(ev.target.value)}
             />

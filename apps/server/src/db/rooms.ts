@@ -8,6 +8,7 @@ import {
   Round,
   Word,
   Hint,
+  Difficulty,
 } from '@just-belgione/types';
 
 const getRoom = async (id: string) => {
@@ -49,6 +50,7 @@ const createRoom = async (room: CreateRoomBody | Room): Promise<string> => {
     ...room,
     status: 'WAITING',
     rounds: [],
+
   };
 
   const res = await fetch(`${BASE_URL}/action/insertOne`, {
@@ -134,7 +136,8 @@ const createRound = async (
   id: Room['_id'],
   playerGuessing: Player,
   wordToGuess: Word,
-  previousCurrentRound?: Round
+  previousCurrentRound?: Round,
+  difficulty?: Difficulty
 ) => {
   const BASE_URL = Deno.env.get('MONGO_BASE_URL');
   const API_KEY = Deno.env.get('MONGO_API_KEY');
@@ -165,6 +168,7 @@ const createRound = async (
       update: {
         $set: {
           currentRound: newRound,
+          difficulty,
         },
         $push: previousCurrentRound
           ? {

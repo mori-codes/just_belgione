@@ -8,6 +8,7 @@ import { GameOver } from './GameOver/GameOver';
 import { useEffect, useState } from 'react';
 import { useUser } from '../atoms/userAtom';
 import { PageWrapper } from '../components/common/PageWrapper';
+import { useLocalization } from '../atoms/localizationAtom';
 
 const BASE_URL = process.env.NX_REACT_APP_WS_URL;
 const PATH = '/ws';
@@ -18,6 +19,7 @@ const Room = () => {
   const [user] = useUser();
   const [players, setPlayers] = useState<Player[]>([]);
   const { data: room, isLoading } = useGetRoom(id);
+  const { stringTable } = useLocalization();
 
   // If the room is not ready, do not trigger a socket connection
   const socketUrl =
@@ -54,7 +56,7 @@ const Room = () => {
     return (
       <PageWrapper>
         <div className="h-[100dvh] flex justify-center items-center text-jo-md w-full">
-          Cargando...
+          {stringTable.LOADING}
         </div>
       </PageWrapper>
     );

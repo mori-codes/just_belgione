@@ -11,6 +11,7 @@ import { HintList } from '../../../components/common/HintList';
 import { BottomGradient } from '../../../components/common/BottomGradient';
 import { Button } from '../../../components/common/Button';
 import { Person } from '../../../components/icons/Person';
+import { useLocalization } from '../../../atoms/localizationAtom';
 
 type Props = {
   hints: Hint[];
@@ -26,6 +27,7 @@ const HintsPreview = ({
   roomId,
   sendMessage,
 }: Props) => {
+  const { stringTable } = useLocalization();
   const areAllPlayersReady = hints.length === players.length - 1;
 
   const handleClick = (hint: Hint, valid: boolean) => {
@@ -63,13 +65,13 @@ const HintsPreview = ({
           <div className="text-center mt-[100px] mb-8">
             {areAllPlayersReady ? (
               <>
-                <h2 className="text-jo-md">¡Ya están todos!</h2>
+                <h2 className="text-jo-md">{stringTable.EVERYONE_IS_READY}</h2>
                 <p className="text-jo-sm">
-                  Ahora toca descartar las pistas que consideréis idénticas
+                  {stringTable.EVERYONE_IS_READY_DESCRIPTION}
                 </p>
               </>
             ) : (
-              <h2 className="text-jo-md">Esperando a todos</h2>
+              <h2 className="text-jo-md">{stringTable.WAITING_FOR_EVERYONE}</h2>
             )}
           </div>
           <HintList
@@ -83,7 +85,7 @@ const HintsPreview = ({
         <BottomGradient color="green">
           <div className="px-4">
             <Button bgColor="bg-jo-green" onClick={handleSend}>
-              Confirmar
+              {stringTable.CONFIRM_BUTTON}
             </Button>
           </div>
         </BottomGradient>

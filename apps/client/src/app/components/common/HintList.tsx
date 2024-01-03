@@ -1,6 +1,7 @@
 import { Hint, Player } from '@just-belgione/types';
 import { getPlayerColor } from '../../helpers/getPlayerColor';
 import { Cancel } from '../icons/Cancel';
+import { useLocalization } from '../../atoms/localizationAtom';
 
 type HintItemProps = {
   hint: Hint;
@@ -40,11 +41,13 @@ const HintList = ({
   onHintClick,
   showPlaceholder = false,
 }: Props) => {
+  const { stringTable } = useLocalization();
+
   return (
     <div className="flex flex-col gap-4">
       {hints.length === 0 && showPlaceholder ? (
         <div className="bg-white shadow-lg text-center py-8 px-4 text-jo-md rounded-sm text-jo-grey">
-          Parece que no hay ninguna pista disponible ¡Buena suerte!
+          {stringTable.NO_HINTS_PLACEHOLDER}
         </div>
       ) : (
         hints.map((hint) => (

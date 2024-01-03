@@ -11,14 +11,14 @@ const getTotalRounds = (players: Player[]) => {
 const startRound = async (
   activeGames: ActiveGames,
   roomId: Room['_id'],
-  difficulty: Difficulty
+  newDifficulty?: Difficulty
 ): Promise<void> => {
   const room = await getRoom(roomId);
   if (!room) {
     throw new Error('Room not found');
   }
 
-  const { players, rounds, status, currentRound } = room;
+  const { players, rounds, status, currentRound, difficulty } = room;
   const isLastRound = rounds.length + 1 === getTotalRounds(players);
 
   if (isLastRound) {
@@ -50,7 +50,13 @@ const startRound = async (
     : (rounds.length + 1) % players.length;
 
   const playerGuessing = players[playerGuessingIndex];
-  const wordToGuess = getRandomWord(difficulty);
+  const wordDifficulty = difficulty ?? newDifficulty;
+
+  if (wordDifficulty === undefined) {
+    throw new Error('Invalid game state, no difficulty has been set');
+  }
+
+  const wordToGuess = getRandomWord(wordDifficulty);
 
   // Update the database.
   if (status === 'WAITING') {
@@ -58,7 +64,13 @@ const startRound = async (
     activeGames[roomId].status = 'PLAYING';
   }
 
-  await createRound(roomId, playerGuessing, wordToGuess, currentRound);
+  await createRound(
+    roomId,
+    playerGuessing,
+    wordToGuess,
+    currentRound,
+    newDifficulty
+  );
 
   // Notify all.
   notifyAll(activeGames, roomId, {
@@ -70,7 +82,6 @@ const startRound = async (
         wordToGuess,
         hints: [],
       },
-      difficulty,
     },
   });
 };

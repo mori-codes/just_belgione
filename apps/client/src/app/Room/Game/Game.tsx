@@ -13,7 +13,6 @@ import { PlayerNotGuessing } from './PlayerNotGuessing/PlayerNotGuessing';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
 import RoundResult from './RoundResult/RoundResult';
-import { useDifficulty } from '../../atoms/difficultyAtom';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '../../resources/room/room.hooks';
 
@@ -31,7 +30,6 @@ const Game: React.FC<Props> = ({
   room,
 }) => {
   const [user] = useUser();
-  const [, setDifficulty] = useDifficulty();
   const [round, setRound] = useState<Round | undefined>(room.currentRound);
   const [roundResult, setRoundResult] = useState<RoundResultMessage['data']>();
   const iAmGuessing = round?.playerGuessing === user;
@@ -52,14 +50,13 @@ const Game: React.FC<Props> = ({
           currentRound: lastJsonMessage.data.round,
         };
       });
-      setDifficulty(lastJsonMessage.data.difficulty);
       setRoundResult(undefined);
     }
 
     if (lastJsonMessage.type === 'roundResult') {
       setRoundResult(lastJsonMessage.data);
     }
-  }, [lastJsonMessage, queryClient, room._id, setDifficulty]);
+  }, [lastJsonMessage, queryClient, room._id]);
 
   // Handle invalid room error
   useEffect(() => {

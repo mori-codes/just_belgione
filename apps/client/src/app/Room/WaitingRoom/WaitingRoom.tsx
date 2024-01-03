@@ -3,8 +3,9 @@ import {
   Player,
   StartGameMessage,
   ServerMessage,
+  Difficulty,
 } from '@just-belgione/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '../../atoms/userAtom';
 import { PageWrapper } from '../../components/common/PageWrapper';
 import { PlayerDisplay } from './PlayerDisplay';
@@ -13,7 +14,7 @@ import { RoomCode } from './RoomCode';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationContext } from '../../context/NotificationContext';
 import { DifficultySelector } from './DifficultySelector';
-import { useDifficulty } from '../../atoms/difficultyAtom';
+import { useLocalization } from '../../atoms/localizationAtom';
 
 type Props = {
   roomId: Room['_id'];
@@ -31,10 +32,11 @@ const WaitingRoom: React.FC<Props> = ({
   setPlayers,
 }) => {
   const [user] = useUser();
-  const [difficulty, setDifficulty] = useDifficulty();
+  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const userCreatedTheRoom = players?.length && user === players[0];
   const navigate = useNavigate();
   const { enqueueError } = useNotificationContext();
+  const { stringTable } = useLocalization();
 
   // Update the list of players
   useEffect(() => {
@@ -73,7 +75,7 @@ const WaitingRoom: React.FC<Props> = ({
         ) : null}
         <div>
           {userCreatedTheRoom ? (
-            <Button onClick={handleStartGame}>Empezar</Button>
+            <Button onClick={handleStartGame}>{stringTable.START_ROOM_BUTTON}</Button>
           ) : null}
         </div>
       </div>
