@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { PageWrapper } from '../../../components/common/PageWrapper';
 import { BottomGradient } from '../../../components/common/BottomGradient';
 import { useLocalization } from '../../../atoms/localizationAtom';
+import { PointsDisplay } from './PointsDisplay';
 
 type Props = {
   guess: string;
@@ -50,13 +51,10 @@ const RoundResult = ({
       <PageWrapper>
         <div className="min-h-[100dvh] w-full px-4 flex flex-col justify-center">
           <div className="bg-white rounded-sm w-full shadow-lg mb-8 py-6 px-4 flex justify-between text-jo-sm">
+            <PointsDisplay points={points} correct={correct} />
             <p>
-              {stringTable.POINTS}: {points}{' '}
-              <span className={correct ? 'text-jo-green' : 'text-jo-red'}>
-                {correct ? '+1' : '+0'}
-              </span>
+              {stringTable.ROUND} {roundIndex + 1}
             </p>
-            <p>{stringTable.ROUND} {roundIndex + 1}</p>
           </div>
           <div className="w-full text-center py-8 rounded-sm bg-white mb-4 shadow-lg">
             <p className="text-jo-sm pb-4">{stringTable.THE_WORD_WAS}</p>
@@ -64,15 +62,19 @@ const RoundResult = ({
           </div>
           <div
             className={`w-full text-center py-8 mb-8 text-white rounded-sm shadow-lg ${
-              correct ? 'bg-jo-green' : 'bg-jo-red'
+              correct ? 'bg-jo-green' : 'bg-jo-rstarted'
             }`}
           >
-            <p className="text-jo-sm pb-4">{playerGuessing} {stringTable.USER_GUESSED} </p>
+            <p className="text-jo-sm pb-4">
+              {playerGuessing} {stringTable.USER_GUESSED}{' '}
+            </p>
             <p className="text-jo-lg uppercase">{guess}</p>
           </div>
           {iAmGuessing ? (
             <Button onClick={handleNextRound}>
-              {isFinalRound ? stringTable.LAST_ROUND_BUTTON : stringTable.NEXT_ROUND_BUTTON}
+              {isFinalRound
+                ? stringTable.LAST_ROUND_BUTTON
+                : stringTable.NEXT_ROUND_BUTTON}
             </Button>
           ) : null}
         </div>
