@@ -18,7 +18,7 @@ const startRound = async (
     throw new Error('Room not found');
   }
 
-  const { players, rounds, status, currentRound, difficulty } = room;
+  const { players, rounds, status, currentRound, difficulty, language } = room;
   const isLastRound = rounds.length + 1 === getTotalRounds(players);
 
   if (isLastRound) {
@@ -56,7 +56,7 @@ const startRound = async (
     throw new Error('Invalid game state, no difficulty has been set');
   }
 
-  const wordToGuess = getRandomWord(wordDifficulty);
+  const wordToGuess = getRandomWord(wordDifficulty, language);
 
   // Update the database.
   if (status === 'WAITING') {

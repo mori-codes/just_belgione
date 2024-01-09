@@ -1,5 +1,6 @@
-import { Difficulty, Word } from '@just-belgione/types';
+import { Difficulty, Word, AvailableLanguages } from '@just-belgione/types';
 import easyWords from '../../words/easy/words.json' with {type: "json"};
+import easyWordsEnglish from '../../words/easy/words.english.json' with {type: "json"};
 import normalWords from "../../words/medium/words.json" with {type: "json"}
 import hardWords from "../../words/hard/words.json" with {type: "json"}
 import veryHardWords from "../../words/very_hard/words.json" with {type: "json"}
@@ -9,11 +10,11 @@ import mAndPWords from "../../words/m&p/words.json" with {type: "json"}
 const getRandomWordsFromList = (list: Word[]) =>
   list[Math.floor(Math.random() * list.length)];
 
-const getRandomWord = (difficulty: Difficulty): Word => {
+const getRandomWord = (difficulty: Difficulty, language: AvailableLanguages): Word => {
   let words = easyWords;
   switch (difficulty) {
     case 'easy':
-      words = easyWords;
+      words = language === "spanish" ? easyWords : easyWordsEnglish;
       break;
     case 'normal':
       words = normalWords;
