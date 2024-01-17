@@ -62,7 +62,7 @@ const RoundResult = ({
           </div>
           <div
             className={`w-full text-center py-8 mb-8 text-white rounded-sm shadow-lg ${
-              correct ? 'bg-jo-green' : 'bg-jo-rstarted'
+              correct ? 'bg-jo-green' : 'bg-jo-red'
             }`}
           >
             <p className="text-jo-sm pb-4">

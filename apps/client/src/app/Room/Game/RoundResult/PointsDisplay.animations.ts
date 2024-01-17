@@ -20,6 +20,9 @@ const pointsDisplayVariants: Variants = {
     opacity: 1,
     y: 0,
     color: ['#121212', '#6CF869', '#121212'],
+    transition: {
+      ease: "easeOut",
+    }
   },
   [pointsDisplayVariantsLabels.incorrect]: {
     color: '#F86969',

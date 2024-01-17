@@ -13,13 +13,14 @@ const PointsDisplay = ({ points, correct }: Props) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      correct && setDisplayNumber((prev) => prev + 1);
+      correct && setDisplayNumber(points + 1);
     }, 500);
 
     return () => {
       timeoutRef.current && clearTimeout(timeoutRef.current);
     };
-  }, [correct]);
+  }, [correct, points]);
+  
   return (
     <motion.p className="overflow-visible flex gap-1">
       {stringTable.POINTS}:
@@ -29,8 +30,10 @@ const PointsDisplay = ({ points, correct }: Props) => {
           key={displayNumber}
           variants={pointsDisplayVariants}
           initial={
-            correct && points !== displayNumber
-              ? pointsDisplayVariantsLabels.entering
+            correct
+              ? points !== displayNumber
+                ? pointsDisplayVariantsLabels.entering
+                : undefined
               : pointsDisplayVariantsLabels.incorrect
           }
           animate={
